@@ -680,7 +680,7 @@ function init3D(){
   wiz.idx = Math.floor(dayOfYear()/1) % ISLANDS.length; wiz.t0=performance.now(); updateWizardNote();
   raycaster=new THREE.Raycaster();
   // labels
-  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · ${isl.sub} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0), p.z)}); });
+  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0), p.z)}); });
   resize(); applySceneTheme(); refreshLabels();
   addEventListener('resize', resize);
   setupPointer(canvas);
