@@ -227,7 +227,7 @@ mjx-container{overflow-x:auto;max-width:100%}
       <p>這座微縮模型把 108 課綱高中數學的 84 個學習內容條目，依主題分配到 15 座六角形小島上，每棟小建築就是一個條目。版面與互動致敬台北市長參選人沈伯洋的「HEART 政策島」：主題島、關鍵字搜尋、條目間的協作連線，以及一位巡島的小人偶，這裡換成在各島講台上演講的小巫師。配色取夜晚的天文塔：深藍夜空、燭光金與火紅重點。</p>
       <ul>
         <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
-        <li><b>地圖方位</b>依原著：城堡立在湖邊懸崖上，黑湖在南、魁地奇球場在西、禁忌森林（與海格小屋）在東、溫室貼著城堡、活米村車站在湖的對岸；占卜塔在北塔。</li>
+        <li><b>地圖方位</b>依原著：城堡立在湖邊懸崖上，黑湖在南、魁地奇球場在西、禁忌森林（與海格小屋）在東、溫室貼著城堡、活米村車站在湖的對岸；占卜塔在北塔。城堡依哥德式風格（蘇格蘭高地的中世紀城堡，電影取景自德倫與格洛斯特大教堂）重做：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。</li>
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
         <li><b>即時資訊</b>：時鐘、學年週次（以 9 月 1 日起算）、學測倒數（預設 2027-01-22，為估計值，請依大考中心公告修改）、每日輪替的「今日條目」。</li>
@@ -261,35 +261,35 @@ const COURSE = {
   '12乙':{name:'12 年級 乙',hex:0xe08a2e, css:'#e08a2e'}
 };
 const ISLANDS = [
- {id:'great-hall', name:'大禮堂', theme:'數與式', sub:'ℝ、|x−a|、a<sup>x</sup>、log x', q:0, r:0, elev:0.9, grass:0x7fb35a, landmark:'hall',
+ {id:'great-hall', name:'大禮堂', theme:'數與式', sub:'ℝ、|x−a|、a<sup>x</sup>、log x', q:0, r:0, elev:1.3, lh:7.2, grass:0x7fb35a, landmark:'hall',
   blurb:'入學的第一堂課在這裡：數線上的每個點都是一個座位。', entries:['N-10-1','N-10-2','N-10-3','N-10-4','N-10-5','N-10-7']},
- {id:'library', name:'圖書館', theme:'集合與計數', sub:'A∩B、C(n,k)、σ', q:1, r:-1, elev:0.9, grass:0x86b964, landmark:'library',
+ {id:'library', name:'圖書館', theme:'集合與計數', sub:'A∩B、C(n,k)、σ', q:1, r:-1, elev:1.5, lh:6.2, grass:0x86b964, landmark:'library',
   blurb:'書目是集合，排架是計數，借閱紀錄是數據。', entries:['D-10-1','D-10-2','D-10-3']},
- {id:'potions', name:'魔藥學地窖', theme:'多項式', sub:'f(x) = ax² + bx + c', q:-1, r:1, elev:0.9, grass:0x6fa352, landmark:'cauldron',
+ {id:'potions', name:'魔藥學地窖', theme:'多項式', sub:'f(x) = ax² + bx + c', q:-1, r:1, elev:0.5, lh:6.0, grass:0x6fa352, landmark:'cauldron',
   blurb:'配方（配方法）與秤量係數，每一瓶多項式都要分解到底。', entries:['A-10-1','A-10-2','F-10-1','F-10-2','F-10-3']},
- {id:'clock', name:'鐘樓', theme:'三角比', sub:'sin θ、cos θ、θ rad', q:-1, r:0, elev:0.9, grass:0x84b85e, landmark:'clock',
+ {id:'clock', name:'鐘樓', theme:'三角比', sub:'sin θ、cos θ、θ rad', q:-1, r:0, elev:1.6, lh:8.0, grass:0x84b85e, landmark:'clock',
   blurb:'指針掃過的每一個角，都可以用弧度量來計時。', entries:['G-10-5','G-10-6','G-10-7','N-11A-1','N-11B-1']},
- {id:'astronomy', name:'天文塔', theme:'坐標幾何', sub:'x²/a² + y²/b² = 1', q:0, r:-2, elev:0.9, grass:0x7cb05c, landmark:'astronomy',
+ {id:'astronomy', name:'天文塔', theme:'坐標幾何', sub:'x²/a² + y²/b² = 1', q:0, r:-2, elev:3.0, lh:10.0, grass:0x7cb05c, landmark:'astronomy',
   blurb:'直線、圓與行星軌道：圓錐曲線在星空裡畫出自己的方程式。', entries:['G-10-1','G-10-2','G-10-3','G-10-4','S-11B-2','G-12甲-1']},
- {id:'staircase', name:'移動樓梯', theme:'數列與極限', sub:'a<sub>n</sub>、lim a<sub>n</sub>', q:0, r:1, elev:0.9, grass:0x8dbd66, landmark:'stairs',
+ {id:'staircase', name:'移動樓梯', theme:'數列與極限', sub:'a<sub>n</sub>、lim a<sub>n</sub>', q:0, r:1, elev:0.8, lh:6.6, grass:0x8dbd66, landmark:'stairs',
   blurb:'一階接一階的遞迴，走到無窮處才知道樓梯通往何方。', entries:['N-10-6','N-12甲-1','N-12甲-2','N-12乙-2']},
- {id:'divination', name:'占卜塔', theme:'機率', sub:'P(A|B)、E(X)', q:1, r:-2, elev:0.9, grass:0x79ad57, landmark:'divination',
+ {id:'divination', name:'占卜塔', theme:'機率', sub:'P(A|B)、E(X)', q:1, r:-2, elev:2.6, lh:8.4, grass:0x79ad57, landmark:'divination',
   blurb:'北塔頂的水晶球裡沒有命運，只有條件機率與期望值。', entries:['D-10-4','D-11A-1','D-11A-2','D-11A-3','D-11B-1','D-11B-2','D-12甲-1','D-12甲-2','D-12乙-1','D-12乙-2']},
- {id:'greenhouse', name:'溫室', theme:'指對數函數', sub:'y = a<sup>x</sup>、log<sub>a</sub> x', q:2, r:-1, elev:0, grass:0x8cc46a, landmark:'greenhouse',
+ {id:'greenhouse', name:'溫室', theme:'指對數函數', sub:'y = a<sup>x</sup>、log<sub>a</sub> x', q:2, r:-1, elev:0, lh:5.4, grass:0x8cc46a, landmark:'greenhouse',
   blurb:'魔法植物按比例成長，記錄它的是指數函數；讀懂它的是對數。', entries:['A-11A-4','F-11A-4','F-11B-2']},
- {id:'transfig', name:'變形學教室', theme:'矩陣與方程組', sub:'A<b>x</b> = <b>b</b>、det A', q:-1, r:-1, elev:0.9, grass:0x7ab25a, landmark:'transfig',
+ {id:'transfig', name:'變形學教室', theme:'矩陣與方程組', sub:'A<b>x</b> = <b>b</b>、det A', q:-1, r:-1, elev:2.0, lh:6.4, grass:0x7ab25a, landmark:'transfig',
   blurb:'矩陣把一個圖形變成另一個圖形，方程組則告訴你變形是否可逆。', entries:['A-11A-1','A-11A-2','A-11A-3','F-11A-3','A-11B-1','A-12乙-1']},
- {id:'quidditch', name:'魁地奇球場', theme:'平面向量', sub:'<b>a</b>·<b>b</b> = |<b>a</b>||<b>b</b>|cos θ', q:-2, r:1, elev:0, grass:0x6ea84f, landmark:'quidditch',
+ {id:'quidditch', name:'魁地奇球場', theme:'平面向量', sub:'<b>a</b>·<b>b</b> = |<b>a</b>||<b>b</b>|cos θ', q:-2, r:1, elev:0, lh:6.2, grass:0x6ea84f, landmark:'quidditch',
   blurb:'城堡西側的球場：每一次飛行都是向量，有大小、有方向，還有內積決定的夾角。', entries:['G-11A-1','G-11A-4','G-11A-6','G-11B-1','G-11B-2','G-11B-3']},
- {id:'lake', name:'黑湖', theme:'三角函數', sub:'y = A sin(ωx + φ)', q:0, r:2, elev:0, grass:0x7db860, landmark:'lake',
+ {id:'lake', name:'黑湖', theme:'三角函數', sub:'y = A sin(ωx + φ)', q:0, r:2, elev:0, lh:5.6, grass:0x7db860, landmark:'lake',
   blurb:'城堡南面的湖：湖面的波紋是正弦函數，疊合之後仍是同頻的波。', entries:['G-11A-5','F-11A-1','F-11A-2','F-11B-1']},
- {id:'forest', name:'禁忌森林', theme:'空間幾何', sub:'<b>a</b>×<b>b</b>、ax + by + cz = d', q:2, r:0, elev:0, grass:0x5e9448, landmark:'forest',
+ {id:'forest', name:'禁忌森林', theme:'空間幾何', sub:'<b>a</b>×<b>b</b>、ax + by + cz = d', q:2, r:0, elev:0, lh:6.0, grass:0x5e9448, landmark:'forest',
   blurb:'城堡東側、海格小屋之後：走進三維，空間中的點、線、面，與外積指向的方向。', entries:['S-11A-1','G-11A-2','G-11A-3','G-11A-7','G-11A-8','G-11A-9','G-11A-10','S-11B-1','G-11B-4']},
- {id:'station', name:'活米村車站', theme:'積分', sub:'∫<sub>a</sub><sup>b</sup> f(x) dx', q:0, r:3, elev:0, grass:0x89bb64, landmark:'station',
+ {id:'station', name:'活米村車站', theme:'積分', sub:'∫<sub>a</sub><sup>b</sup> f(x) dx', q:0, r:3, elev:0, lh:5.4, grass:0x89bb64, landmark:'station',
   blurb:'湖的對岸、通往活米村的車站：列車累積每一段位移，黎曼和把它們加總成積分。', entries:['F-12甲-5','F-12甲-6','F-12甲-7','F-12乙-5','F-12乙-6']},
- {id:'requirement', name:'萬應室', theme:'極限與微分', sub:'f′(x)、lim<sub>x→a</sub>', q:0, r:-1, elev:0.9, grass:0x80b45e, landmark:'door',
+ {id:'requirement', name:'萬應室', theme:'極限與微分', sub:'f′(x)、lim<sub>x→a</sub>', q:0, r:-1, elev:2.2, lh:6.2, grass:0x80b45e, landmark:'door',
   blurb:'你需要什麼，函數就給你什麼：極限、連續、切線斜率。', entries:['F-12甲-1','F-12甲-2','F-12甲-3','F-12甲-4','F-12乙-1','F-12乙-2','F-12乙-3','F-12乙-4']},
- {id:'mirror', name:'意若思鏡廳', theme:'複數', sub:'z = a + bi、|z|', q:1, r:0, elev:0.9, grass:0x86b566, landmark:'mirror',
+ {id:'mirror', name:'意若思鏡廳', theme:'複數', sub:'z = a + bi、|z|', q:1, r:0, elev:1.0, lh:5.8, grass:0x86b566, landmark:'mirror',
   blurb:'鏡中出現的根不在實數線上：複數平面與虛根成對。', entries:['N-12甲-3','A-12甲-1','N-12乙-1','A-12乙-2']}
 ];
 const LINKS = [
@@ -345,7 +345,7 @@ function typeset(el){
 const R = 4.2, TOP = 1.3, SPACING = 1.22;
 const has3D = !!window.THREE;
 let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, linkObjs=[], wizard=null, podium={}, pickables=[];
-const camState = { theta:0.55, phi:1.02, radius:50, target: has3D ? new THREE.Vector3(0,0,0) : null };
+const camState = { theta:0.55, phi:1.05, radius:56, target: has3D ? new THREE.Vector3(0,0,0) : null };
 let fly=null, lastInteract=performance.now();
 
 function hexPos(q,r){ return { x: SPACING*R*Math.sqrt(3)*(q + r/2), z: SPACING*R*1.5*r }; }
@@ -360,8 +360,9 @@ function makeWindows(parent, w, h, d, count, course){
     const m=new THREE.MeshStandardMaterial({color:0xffe9b0, emissive:0xffc966, emissiveIntensity:.2, roughness:.4});
     const wmesh=new THREE.Mesh(g,m); wmesh.castShadow=false;
     const row=Math.floor(i/2), col=i%2;
-    wmesh.position.set((col?0.22:-0.22), 0.35+row*0.42, d/2+0.01);
+    wmesh.position.set((col?0.2:-0.2), 0.35+row*0.5, d/2+0.01);
     parent.add(wmesh); wins.push(m);
+    const arch=new THREE.Mesh(new THREE.ConeGeometry(0.075,0.1,4), m); arch.rotation.y=Math.PI/4; arch.position.set(wmesh.position.x, wmesh.position.y+0.2, wmesh.position.z); arch.castShadow=false; parent.add(arch);
   }
   return wins;
 }
@@ -372,29 +373,34 @@ function makeBuilding(e){
   const stone = mat(0x7b7e8a, {roughness:.95});
   const roofM = mat(c, {roughness:.8});
   const battlements=(rad, y, n)=>{ for(let k=0;k<n;k++){ const a=k*Math.PI*2/n; g.add(mesh(new THREE.BoxGeometry(0.14,0.16,0.14), stone, Math.cos(a)*rad, y, Math.sin(a)*rad)); } };
-  if (pre==='G' || pre==='F'){            // round tower with battlements and steep slate-style cone
-    const h = pre==='F'?1.9:1.5;
-    g.add(mesh(new THREE.CylinderGeometry(0.4,0.44,h,10), wall, 0,h/2,0));
-    g.add(mesh(new THREE.CylinderGeometry(0.5,0.42,0.16,10), stone, 0,h+0.08,0)); battlements(0.45, h+0.24, 8);
-    g.add(mesh(new THREE.ConeGeometry(0.42, pre==='F'?1.3:0.95, 10), roofM, 0,h+(pre==='F'?0.8:0.62),0));
-    g.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.35,4), mat(0xe8c15a,{metalness:.6,roughness:.3}), 0,h+(pre==='F'?1.55:1.2),0));
-    wins = makeWindows(g,0.8,h,0.8, 4, e.course);
-  } else if (pre==='A'){                    // gothic hall with ridge roof
-    const h=1.05;
+  const buttress=(rad, h, n)=>{ for(let k=0;k<n;k++){ const a=k*Math.PI*2/n+Math.PI/n; const b=mesh(new THREE.BoxGeometry(0.1,h,0.2), stone, Math.cos(a)*rad, h/2, Math.sin(a)*rad); b.rotation.y=-a; g.add(b); } };
+  const pinnacle=(x,y,z,sc)=>{ sc=sc||1; g.add(mesh(new THREE.ConeGeometry(0.07*sc,0.32*sc,5), stone, x,y,z)); };
+  if (pre==='G' || pre==='F'){            // gothic tower: slender, buttressed, tall spire
+    const h = pre==='F'?2.5:2.0;
+    g.add(mesh(new THREE.CylinderGeometry(0.32,0.36,h,10), wall, 0,h/2,0)); buttress(0.38, h*0.55, 4);
+    g.add(mesh(new THREE.CylinderGeometry(0.42,0.34,0.14,10), stone, 0,h+0.07,0)); battlements(0.38, h+0.22, 8);
+    g.add(mesh(new THREE.ConeGeometry(0.34, pre==='F'?1.8:1.4, 10), roofM, 0,h+(pre==='F'?1.04:0.84),0));
+    for(let k=0;k<4;k++){ const a=k*Math.PI/2; pinnacle(Math.cos(a)*0.36, h+0.32, Math.sin(a)*0.36, 1); }
+    g.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.4,4), mat(0xe8c15a,{metalness:.6,roughness:.3}), 0,h+(pre==='F'?2.1:1.7),0));
+    wins = makeWindows(g,0.7,h,0.7, 4, e.course);
+  } else if (pre==='A'){                    // gothic chapel-hall: steep gable, flying buttresses, ridge pinnacles
+    const h=1.2;
     g.add(mesh(new THREE.BoxGeometry(1.3,h,0.85), wall, 0,h/2,0));
-    g.add(ridge(1.5, 0.95, 0.75, roofM, 0, h, 0));
-    g.add(mesh(new THREE.BoxGeometry(0.14,0.5,0.14), stone, 0.45,h+0.55,0));
+    g.add(ridge(1.5, 0.95, 1.0, roofM, 0, h, 0));
+    [-0.45,0,0.45].forEach(x=>{ [0.5,-0.5].forEach(zz=>{ const b=mesh(new THREE.BoxGeometry(0.1,0.9,0.16), stone, x, 0.45, zz); b.rotation.x = zz>0?-0.28:0.28; g.add(b); }); });
+    pinnacle(-0.75,h+1.05,0,1.1); pinnacle(0.75,h+1.05,0,1.1);
     wins = makeWindows(g,1.3,h,0.85, 2, e.course);
-  } else if (pre==='D'){                    // observatory dome on a stone drum
-    const h=0.9;
-    g.add(mesh(new THREE.CylinderGeometry(0.5,0.52,h,10), wall, 0,h/2,0)); battlements(0.5, h+0.08, 8);
+  } else if (pre==='D'){                    // chapter-house: stone drum, dome, gothic lantern spire
+    const h=1.0;
+    g.add(mesh(new THREE.CylinderGeometry(0.5,0.52,h,10), wall, 0,h/2,0)); buttress(0.54, h*0.8, 6); battlements(0.5, h+0.08, 8);
     g.add(mesh(new THREE.SphereGeometry(0.46,12,8,0,Math.PI*2,0,Math.PI/2), roofM, 0,h,0));
+    g.add(mesh(new THREE.CylinderGeometry(0.12,0.14,0.3,6), stone, 0,h+0.55,0)); g.add(mesh(new THREE.ConeGeometry(0.14,0.5,6), roofM, 0,h+0.95,0));
     wins = makeWindows(g,1,h,1.0, 2, e.course);
-  } else {                                  // stone cottage with chimney
-    const h=0.95;
+  } else {                                  // gothic lodge: steep slate gable, chimney, corner pinnacle
+    const h=1.0;
     g.add(mesh(new THREE.BoxGeometry(0.9,h,0.9), wall, 0,h/2,0));
-    g.add(ridge(1.0, 1.0, 0.7, roofM, 0, h, 0));
-    g.add(mesh(new THREE.BoxGeometry(0.16,0.5,0.16), stone, 0.3,h+0.45,0.2));
+    g.add(ridge(1.0, 1.0, 0.9, roofM, 0, h, 0));
+    g.add(mesh(new THREE.BoxGeometry(0.16,0.55,0.16), stone, 0.3,h+0.5,0.2)); pinnacle(-0.5,h+0.95,0,1);
     wins = makeWindows(g,0.9,h,0.9, 2, e.course);
   }
   g.userData.wins = wins;
@@ -418,10 +424,11 @@ function makeLandmark(kind, isl){
   const add=o=>{g.add(o);return o;};
   switch(kind){
     case 'hall': {   // Great Hall: long gothic hall, steep slate gable, corner turrets, pinnacles, tall arched windows
-      add(mesh(new THREE.BoxGeometry(3.2,1.9,1.4), stone, 0,0.95,0));
-      add(ridge(3.4, 1.5, 1.4, slate, 0, 1.9, 0));
-      [[-1.6,-0.7],[1.6,-0.7],[-1.6,0.7],[1.6,0.7]].forEach(([x,z])=>{ add(mesh(new THREE.CylinderGeometry(0.24,0.27,2.6,8), stone, x,1.3,z)); add(cone(0.3,0.9,0x2f3444,x,3.05,z,8)); });
-      for(let i=-1;i<=1;i++) pinn(i*1.1, 3.55, 0, 0.9);
+      add(mesh(new THREE.BoxGeometry(3.2,2.2,1.4), stone, 0,1.1,0));
+      add(ridge(3.4, 1.5, 1.7, slate, 0, 2.2, 0));
+      [[-1.6,-0.7],[1.6,-0.7],[-1.6,0.7],[1.6,0.7]].forEach(([x,z])=>{ add(mesh(new THREE.CylinderGeometry(0.24,0.27,3.2,8), stone, x,1.6,z)); add(cone(0.3,1.3,0x2f3444,x,3.85,z,8)); });
+      for(let i=-1;i<=1;i++) pinn(i*1.1, 4.1, 0, 1.1);
+      [-1.0,-0.33,0.33,1.0].forEach(x=>{ [0.95,-0.95].forEach(zz=>{ const fb=add(mesh(new THREE.BoxGeometry(0.12,1.6,0.18), stone, x, 0.8, zz)); fb.rotation.x = zz>0?-0.3:0.3; }); });   // flying buttresses
       for(let i=0;i<6;i++){ const w=new THREE.Mesh(new THREE.BoxGeometry(0.16,0.7,0.05), new THREE.MeshStandardMaterial({color:0xffe9b0,emissive:0xffc966,emissiveIntensity:1.4})); w.position.set(-1.25+i*0.5,1.0,0.72); add(w); const w2=w.clone(); w2.position.z=-0.72; add(w2); }
       add(mesh(new THREE.BoxGeometry(0.7,1.1,0.1), mat(0x3a2414), 0,0.55,0.72));   // oak doors
       break; }
@@ -437,20 +444,21 @@ function makeLandmark(kind, isl){
       for(let i=0;i<4;i++){ const b=add(new THREE.Mesh(new THREE.SphereGeometry(0.08,8,8), new THREE.MeshStandardMaterial({color:0xb8ffc8,emissive:0x5fe07a,emissiveIntensity:.8}))); const ph=i*1.6; anim.push(t=>{ b.position.set(Math.cos(t+ph)*0.3, 1.0+((t*0.6+ph)%1.4), Math.sin(t+ph)*0.3); }); }
       break; }
     case 'clock': {
-      add(mesh(new THREE.BoxGeometry(1.1,3.2,1.1), stone, 0,1.6,0));
-      [[-0.55,-0.55],[0.55,-0.55],[-0.55,0.55],[0.55,0.55]].forEach(([x,z])=>pinn(x,3.4,z,1));
-      add(cone(0.8,1.4,0x2f3444,0,3.85,0,4)).rotation.y=Math.PI/4;
-      const face=add(new THREE.Mesh(new THREE.CylinderGeometry(0.42,0.42,0.06,24), mat(0xfff6dc))); face.rotation.x=Math.PI/2; face.position.set(0,2.4,0.56);
-      const hh=add(mesh(new THREE.BoxGeometry(0.05,0.24,0.03), mat(0x222), 0,2.4,0.61)); const mh=add(mesh(new THREE.BoxGeometry(0.04,0.36,0.03), mat(0x222), 0,2.4,0.62));
+      add(mesh(new THREE.BoxGeometry(1.1,4.0,1.1), stone, 0,2.0,0));
+      [[-0.55,-0.55],[0.55,-0.55],[-0.55,0.55],[0.55,0.55]].forEach(([x,z])=>pinn(x,4.3,z,1.3));
+      add(cone(0.78,2.2,0x2f3444,0,5.1,0,4)).rotation.y=Math.PI/4;
+      const face=add(new THREE.Mesh(new THREE.CylinderGeometry(0.42,0.42,0.06,24), mat(0xfff6dc,{emissive:0xffe2a0,emissiveIntensity:.5}))); face.rotation.x=Math.PI/2; face.position.set(0,3.1,0.56);
+      const hh=add(mesh(new THREE.BoxGeometry(0.05,0.24,0.03), mat(0x222), 0,3.1,0.61)); const mh=add(mesh(new THREE.BoxGeometry(0.04,0.36,0.03), mat(0x222), 0,3.1,0.62));
       hh.geometry.translate(0,0.12,0); mh.geometry.translate(0,0.18,0); clockHands=[hh,mh];
       break; }
     case 'astronomy': {
-      add(mesh(new THREE.CylinderGeometry(0.55,0.65,4.2,10), stone, 0,2.1,0));
-      add(mesh(new THREE.CylinderGeometry(0.72,0.58,0.22,10), stone, 0,4.3,0)); for(let k=0;k<10;k++){ const a=k*Math.PI/5; add(mesh(new THREE.BoxGeometry(0.16,0.2,0.16), stone, Math.cos(a)*0.66,4.5,Math.sin(a)*0.66)); }
-      add(cone(0.58,1.5,0x2f3444,0,5.15,0,10));
-      const ring=add(mesh(new THREE.TorusGeometry(0.9,0.05,8,32), gold, 0,5.9,0)); const ring2=add(mesh(new THREE.TorusGeometry(0.65,0.05,8,32), gold, 0,5.9,0));
-      const planet=add(mesh(new THREE.SphereGeometry(0.14,10,10), mat(0xe8a24a), 0,5.9,0));
-      anim.push(t=>{ ring.rotation.set(t*0.3, t*0.5, 0); ring2.rotation.set(-t*0.4, 0, t*0.35); planet.position.set(Math.cos(t*0.8)*1.1, 5.9+Math.sin(t*0.8)*0.5, Math.sin(t*0.8)*0.6); });
+      add(mesh(new THREE.CylinderGeometry(0.5,0.62,6.0,10), stone, 0,3.0,0));
+      for(let k=0;k<6;k++){ const a=k*Math.PI/3; const fb=add(mesh(new THREE.BoxGeometry(0.12,2.4,0.22), stone, Math.cos(a)*0.72, 1.2, Math.sin(a)*0.72)); fb.rotation.y=-a; fb.rotation.z=Math.cos(a)*0.12; fb.rotation.x=-Math.sin(a)*0.12; }
+      add(mesh(new THREE.CylinderGeometry(0.7,0.54,0.22,10), stone, 0,6.1,0)); for(let k=0;k<10;k++){ const a=k*Math.PI/5; add(mesh(new THREE.BoxGeometry(0.16,0.2,0.16), stone, Math.cos(a)*0.64,6.3,Math.sin(a)*0.64)); }
+      add(cone(0.54,2.2,0x2f3444,0,7.3,0,10)); for(let k=0;k<4;k++){ const a=k*Math.PI/2+Math.PI/4; pinn(Math.cos(a)*0.62, 6.6, Math.sin(a)*0.62, 1.2); }
+      const ring=add(mesh(new THREE.TorusGeometry(0.9,0.05,8,32), gold, 0,8.6,0)); const ring2=add(mesh(new THREE.TorusGeometry(0.65,0.05,8,32), gold, 0,8.6,0));
+      const planet=add(mesh(new THREE.SphereGeometry(0.14,10,10), mat(0xe8a24a), 0,8.6,0));
+      anim.push(t=>{ ring.rotation.set(t*0.3, t*0.5, 0); ring2.rotation.set(-t*0.4, 0, t*0.35); planet.position.set(Math.cos(t*0.8)*1.1, 8.6+Math.sin(t*0.8)*0.5, Math.sin(t*0.8)*0.6); });
       break; }
     case 'stairs': {
       for(let i=0;i<9;i++){ const a=i*0.75; const s=add(mesh(new THREE.BoxGeometry(0.9,0.22,0.5), mat(i%2?0x9b6b45:0xb58350), Math.cos(a)*0.8, 0.11+i*0.33, Math.sin(a)*0.8)); s.rotation.y=-a; }
@@ -458,10 +466,10 @@ function makeLandmark(kind, isl){
       const flt=add(mesh(new THREE.BoxGeometry(0.9,0.22,0.5), mat(0xe2b64a), 0,3.4,0)); anim.push(t=>{ flt.position.y=3.4+Math.sin(t*1.5)*0.15; flt.rotation.y=t*0.6; });
       break; }
     case 'divination': {
-      add(mesh(new THREE.CylinderGeometry(0.5,0.6,2.6,10), stone, 0,1.3,0)); for(let k=0;k<8;k++){ const a=k*Math.PI/4; add(mesh(new THREE.BoxGeometry(0.14,0.18,0.14), stone, Math.cos(a)*0.5,2.68,Math.sin(a)*0.5)); }
-      add(cone(0.6,1.1,0x2f3444,0,3.15,0,10));
-      const ball=add(new THREE.Mesh(new THREE.SphereGeometry(0.42,16,16), new THREE.MeshStandardMaterial({color:0xcfe8ff,emissive:0x7fb8ff,emissiveIntensity:.5,transparent:true,opacity:.8,roughness:.1}))); ball.position.y=4.0;
-      anim.push(t=>{ ball.position.y=4.0+Math.sin(t*1.2)*0.1; ball.material.emissiveIntensity=0.5+Math.sin(t*2)*0.25; });
+      add(mesh(new THREE.CylinderGeometry(0.46,0.58,4.2,10), stone, 0,2.1,0)); for(let k=0;k<8;k++){ const a=k*Math.PI/4; add(mesh(new THREE.BoxGeometry(0.14,0.18,0.14), stone, Math.cos(a)*0.5,4.28,Math.sin(a)*0.5)); const fb=add(mesh(new THREE.BoxGeometry(0.1,1.6,0.2), stone, Math.cos(a)*0.66, 0.8, Math.sin(a)*0.66)); fb.rotation.y=-a; }
+      add(cone(0.52,1.6,0x2f3444,0,5.0,0,10));
+      const ball=add(new THREE.Mesh(new THREE.SphereGeometry(0.42,16,16), new THREE.MeshStandardMaterial({color:0xcfe8ff,emissive:0x7fb8ff,emissiveIntensity:.5,transparent:true,opacity:.8,roughness:.1}))); ball.position.y=6.2;
+      anim.push(t=>{ ball.position.y=6.2+Math.sin(t*1.2)*0.1; ball.material.emissiveIntensity=0.5+Math.sin(t*2)*0.25; });
       break; }
     case 'greenhouse': {
       const glass=new THREE.MeshStandardMaterial({color:0xbfe9d6,transparent:true,opacity:.45,roughness:.1,metalness:.1});
@@ -545,6 +553,36 @@ function buildIsland(isl){
   tag(grass,{island:isl.id}); tag(lm,{island:isl.id}); pickables.push(grass, lm);
   islandObj[isl.id]=g; scene.add(g);
 }
+const TC={x:0,z:0};
+function hash2(x,z){ const v=Math.sin(x*127.1+z*311.7)*43758.5453; return v-Math.floor(v); }
+function vnoise(x,z){ const xi=Math.floor(x), zi=Math.floor(z), xf=x-xi, zf=z-zi; const u=xf*xf*(3-2*xf), v=zf*zf*(3-2*zf); const a=hash2(xi,zi), b=hash2(xi+1,zi), c=hash2(xi,zi+1), d=hash2(xi+1,zi+1); return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v; }
+function terrainH(x,z){
+  const d=Math.hypot(x-TC.x, z-TC.z); if (d<33) return -3;
+  const t=Math.min(1,(d-33)/30), rise=t*t*(3-2*t);
+  const n=vnoise(x*0.045,z*0.045)*0.65+vnoise(x*0.11,z*0.11)*0.35;
+  const peaks=Math.max(0,d-62)*0.17*(0.5+0.9*vnoise(x*0.018+5,z*0.018+5));
+  return -3*(1-rise) + rise*(8+15*n) + peaks;
+}
+function buildMountains(){
+  const size=360, seg=110; const geo=new THREE.PlaneGeometry(size,size,seg,seg); const pos=geo.attributes.position; const col=new Float32Array(pos.count*3);
+  const lo=new THREE.Color(0x141c38), mid=new THREE.Color(0x242e52), hi=new THREE.Color(0x8d97bd), tmp=new THREE.Color();
+  for(let i=0;i<pos.count;i++){ const x=pos.getX(i)+TC.x, z=-pos.getY(i)+TC.z; const h=terrainH(x,z); pos.setZ(i,h);
+    const k=Math.max(0,Math.min(1,(h-6)/26)); if (k<0.6) tmp.copy(lo).lerp(mid,k/0.6); else tmp.copy(mid).lerp(hi,(k-0.6)/0.4); col[i*3]=tmp.r; col[i*3+1]=tmp.g; col[i*3+2]=tmp.b; }
+  geo.setAttribute('color', new THREE.BufferAttribute(col,3)); geo.rotateX(-Math.PI/2); geo.translate(TC.x,0,TC.z); geo.computeVertexNormals();
+  const m=new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors:true, flatShading:true, roughness:1, metalness:0})); m.receiveShadow=true; scene.add(m);
+  const rs=seeded(23); for(let i=0;i<70;i++){ const a=rs()*Math.PI*2, d=36+rs()*34; const x=TC.x+Math.cos(a)*d, z=TC.z+Math.sin(a)*d; const h=terrainH(x,z); if (h<1.5 || h>20) continue; const t=tree(0,0,1.4+rs()*1.4,true); t.position.set(x,h-TOP,z); scene.add(t); }
+}
+function buildViaducts(){
+  const stone=mat(0x7b7e8a,{roughness:.95,flatShading:true}); const dirs=[[1,0],[0,1],[1,-1]];
+  ISLANDS.forEach(A=>{ if(!(A.elev>0)) return; dirs.forEach(([dq,dr])=>{ const B=ISLANDS.find(i=>i.q===A.q+dq && i.r===A.r+dr && i.elev>0); if(!B) return;
+    const pa=hexPos(A.q,A.r), pb=hexPos(B.q,B.r); const u=new THREE.Vector3(pb.x-pa.x,0,pb.z-pa.z).normalize(); const ap=R*0.866;
+    const ea=new THREE.Vector3(pa.x,A.elev+TOP,pa.z).addScaledVector(u,ap-0.6), eb=new THREE.Vector3(pb.x,B.elev+TOP,pb.z).addScaledVector(u,-(ap-0.6));
+    const dir=eb.clone().sub(ea); const len=ea.distanceTo(eb); const grp=new THREE.Group(); grp.position.copy(ea.clone().add(eb).multiplyScalar(0.5)); grp.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), dir.clone().normalize());
+    grp.add(mesh(new THREE.BoxGeometry(len,0.3,1.0), stone, 0,0,0)); grp.add(mesh(new THREE.BoxGeometry(len,0.25,0.1), stone, 0,0.25,0.45)); grp.add(mesh(new THREE.BoxGeometry(len,0.25,0.1), stone, 0,0.25,-0.45));
+    scene.add(grp);
+    [0.3,0.5,0.7].forEach(k=>{ const q=ea.clone().lerp(eb,k); const h=q.y+1.2; const pil=mesh(new THREE.CylinderGeometry(0.16,0.2,h,6), stone, q.x, q.y-h/2, q.z); scene.add(pil); });
+  }); });
+}
 function buildLinks(){
   LINKS.forEach((L,i)=>{
     const A=buildings[L[0]], B=buildings[L[1]]; if(!A||!B) return;
@@ -622,11 +660,11 @@ function init3D(){
   const canvas=$('#scene');
   renderer=new THREE.WebGLRenderer({canvas, antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1, 2)); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputEncoding=THREE.sRGBEncoding;
-  scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x111a36, 48, 135);
+  scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x111a36, 55, 200);
   camera=new THREE.PerspectiveCamera(42, 1, 0.5, 400);
   hemi=new THREE.HemisphereLight(0x3c4f9a, 0x0d1222, 0.55); scene.add(hemi);
   sun=new THREE.DirectionalLight(0xc3d2ff, 0.75); sun.position.set(-40,55,-30); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048);   // moonlight
-  Object.assign(sun.shadow.camera,{left:-60,right:60,top:60,bottom:-60,near:5,far:180}); sun.shadow.bias=-0.0004; sun.shadow.camera.updateProjectionMatrix(); scene.add(sun);
+  Object.assign(sun.shadow.camera,{left:-70,right:70,top:70,bottom:-70,near:5,far:220}); sun.shadow.bias=-0.0004; sun.shadow.camera.updateProjectionMatrix(); scene.add(sun);
   const fill=new THREE.DirectionalLight(0xffc37a, 0.22); fill.position.set(30,18,30); scene.add(fill);   // faint candle warmth from the south-east
   water=new THREE.Mesh(new THREE.PlaneGeometry(600,600), new THREE.MeshStandardMaterial({color:0x0c2436, roughness:.25, metalness:.3})); water.rotation.x=-Math.PI/2; water.position.y=0.6; water.receiveShadow=true; scene.add(water);
   // stars and moon
@@ -636,13 +674,13 @@ function init3D(){
     const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); }
   // little boats drifting in the channels
   const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); const a=rnd()*Math.PI*2, rr=22+rnd()*10; b.position.set(Math.cos(a)*rr+2, 0.6, Math.sin(a)*rr+2); b.rotation.y=-a; scene.add(b); anim.push(t=>{ b.position.y=0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
-  ISLANDS.forEach(buildIsland); buildLinks();
-  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); camState.target.set(cx/ISLANDS.length, 0.5, cz/ISLANDS.length); }
+  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(TC.x, 1.5, TC.z); }
+  ISLANDS.forEach(buildIsland); buildLinks(); buildViaducts(); buildMountains();
   wizard=makeWizard(); scene.add(wizard);
   wiz.idx = Math.floor(dayOfYear()/1) % ISLANDS.length; wiz.t0=performance.now(); updateWizardNote();
   raycaster=new THREE.Raycaster();
   // labels
-  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · ${isl.sub} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+6.4+(isl.elev||0), p.z)}); });
+  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · ${isl.sub} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0), p.z)}); });
   resize(); applySceneTheme(); refreshLabels();
   addEventListener('resize', resize);
   setupPointer(canvas);
