@@ -1,4 +1,4 @@
-<title>霍格華茲數學島</title>
+<title>星穹數學學院</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=LXGW+WenKai+TC:wght@400;700&family=Noto+Serif+TC:wght@500;700&display=swap">
 <style>
@@ -159,7 +159,7 @@ mjx-container{overflow-x:auto;max-width:100%}
 </style>
 
 <div id="app">
-  <canvas id="scene" aria-label="霍格華茲數學島 3D 微縮模型"></canvas>
+  <canvas id="scene" aria-label="星穹數學學院 3D 微縮模型"></canvas>
   <div id="nothree" hidden>
     <div><p>3D 場景尚未載入（需要連線到 cdnjs 取得 Three.js）。</p><p>仍可使用上方搜尋與「島嶼清單」瀏覽全部 84 個課綱條目。</p></div>
   </div>
@@ -169,8 +169,8 @@ mjx-container{overflow-x:auto;max-width:100%}
 
   <header id="topbar">
     <div class="crest">
-      <svg viewBox="0 0 38 44" aria-hidden="true"><path d="M3 3h32v20c0 10-8 16-16 19C11 39 3 33 3 23z" fill="#8b1e2d" stroke="#c4922a" stroke-width="2"/><path d="M19 3v39M3 20h32" stroke="#c4922a" stroke-width="1.5"/><text x="19" y="30" text-anchor="middle" font-family="Cinzel Decorative,serif" font-size="16" font-weight="700" fill="#f0d9a2">∑</text></svg>
-      <h1>霍格華茲數學島<span>108 課綱高中數學 · 15 座島 · 84 個條目</span></h1>
+      <svg viewBox="0 0 40 44" aria-hidden="true"><polygon points="20,2 37,11.5 37,32.5 20,42 3,32.5 3,11.5" fill="#101a3a" stroke="#d9b35b" stroke-width="2"/><polygon points="20,7 32.5,14 32.5,30 20,37 7.5,30 7.5,14" fill="none" stroke="#d9b35b" stroke-width="0.8" opacity=".6"/><path d="M26 11.5a5 5 0 1 0 4 7.5a4 4 0 1 1-4-7.5z" fill="#ece2c8"/><circle cx="11" cy="13" r="1.1" fill="#ece2c8"/><circle cx="14" cy="18.5" r="0.8" fill="#ece2c8"/><circle cx="9" cy="20" r="0.7" fill="#ece2c8"/><text x="20" y="34" text-anchor="middle" font-family="Cinzel Decorative,serif" font-size="15" font-weight="700" fill="#d9b35b">∑</text></svg>
+      <h1>星穹數學學院<span>108 課綱高中數學 · 15 座島 · 84 個條目</span></h1>
     </div>
     <div id="search-wrap">
       <label for="search" class="sr" hidden>搜尋條目</label>
@@ -195,7 +195,7 @@ mjx-container{overflow-x:auto;max-width:100%}
   </header>
 
   <section id="live" class="placard" aria-label="即時資訊">
-    <h2>HOGWARTS CLOCK · 即時資訊</h2>
+    <h2>ASTRA CLOCK · 即時資訊</h2>
     <div class="clock"><span id="clock-time">--:--:--</span><small id="clock-date"></small></div>
     <dl class="kv">
       <dt>學年進度</dt><dd id="term-week"></dd>
@@ -227,7 +227,7 @@ mjx-container{overflow-x:auto;max-width:100%}
       <p>這座微縮模型把 108 課綱高中數學的 84 個學習內容條目，依主題分配到 15 座六角形小島上，每棟小建築就是一個條目。版面與互動致敬台北市長參選人沈伯洋的「HEART 政策島」：主題島、關鍵字搜尋、條目間的協作連線，以及一位巡島的小人偶，這裡換成在各島講台上演講的小巫師。配色取夜晚的天文塔：深藍夜空、燭光金與火紅重點。</p>
       <ul>
         <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
-        <li><b>地圖方位</b>依原著：城堡立在湖邊懸崖上，黑湖在南、魁地奇球場在西、禁忌森林（與海格小屋）在東、溫室貼著城堡、活米村車站在湖的對岸；占卜塔在北塔。城堡依哥德式風格（蘇格蘭高地的中世紀城堡，電影取景自德倫與格洛斯特大教堂）重做：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座城堡坐落在山體上，台地之間是窄谷，黑湖是山腳東南側的湖盆，活米村車站在湖的對岸。</li>
+        <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座城堡坐落在山體上，台地之間是窄谷，黑湖是山腳東南側的湖盆，活米村車站在湖的對岸。</li>
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
         <li><b>即時資訊</b>：時鐘、學年週次（以 9 月 1 日起算）、學測倒數（預設 2027-01-22，為估計值，請依大考中心公告修改）、每日輪替的「今日條目」。</li>
@@ -284,7 +284,7 @@ const ISLANDS = [
  {id:'lake', name:'黑湖', theme:'三角函數', sub:'y = A sin(ωx + φ)', q:0, r:2, elev:0, lh:5.6, grass:0x7db860, landmark:'lake',
   blurb:'城堡南面的湖：湖面的波紋是正弦函數，疊合之後仍是同頻的波。', entries:['G-11A-5','F-11A-1','F-11A-2','F-11B-1']},
  {id:'forest', name:'禁忌森林', theme:'空間幾何', sub:'<b>a</b>×<b>b</b>、ax + by + cz = d', q:2, r:0, elev:0, lh:6.0, grass:0x5e9448, landmark:'forest',
-  blurb:'城堡東側、海格小屋之後：走進三維，空間中的點、線、面，與外積指向的方向。', entries:['S-11A-1','G-11A-2','G-11A-3','G-11A-7','G-11A-8','G-11A-9','G-11A-10','S-11B-1','G-11B-4']},
+  blurb:'城堡東側、守林人小屋之後：走進三維，空間中的點、線、面，與外積指向的方向。', entries:['S-11A-1','G-11A-2','G-11A-3','G-11A-7','G-11A-8','G-11A-9','G-11A-10','S-11B-1','G-11B-4']},
  {id:'station', name:'活米村車站', theme:'積分', sub:'∫<sub>a</sub><sup>b</sup> f(x) dx', q:0, r:3, elev:0, lh:5.4, grass:0x89bb64, landmark:'station',
   blurb:'湖的對岸、通往活米村的車站：列車累積每一段位移，黎曼和把它們加總成積分。', entries:['F-12甲-5','F-12甲-6','F-12甲-7','F-12乙-5','F-12乙-6']},
  {id:'requirement', name:'萬應室', theme:'極限與微分', sub:'f′(x)、lim<sub>x→a</sub>', q:0, r:-1, elev:4.4, lh:6.2, grass:0x80b45e, landmark:'door',
