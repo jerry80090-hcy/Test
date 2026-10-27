@@ -317,6 +317,7 @@ let examDate = '2027-01-22'; try { examDate = localStorage.getItem('hogmath-exam
 let courseFilter = '';
 let searchTerm = '';
 let showLinks = false;
+let linesMuted = false;   // set when the user switches the lines off while an entry is selected
 let selected = null;        // {type:'island', id} | {type:'entry', code}
 
 /* ---------------- helpers ---------------- */
@@ -676,7 +677,7 @@ function refreshDim(){
 function refreshLinks(){
   linkObjs.forEach(L=>{
     const sel = selected && selected.type==='entry' && (L.a===selected.code || L.b===selected.code);
-    const on = showLinks || sel;
+    const on = !!(showLinks || (sel && !linesMuted));
     L.tube.visible=on; L.spark.visible=on && !reduceMotion;
     L.tube.material.opacity = sel ? 1 : 0.7; L.tube.material.emissiveIntensity = sel ? 1.3 : 0.6;
   });
@@ -780,7 +781,7 @@ function selectIsland(id, fly){
   showCard(h); refreshLinks(); setHash(id);
 }
 function selectEntry(code, fly){
-  const e=byCode[code]; if(!e) return; const isl=islandOf[code]; selected={type:'entry', code};
+  const e=byCode[code]; if(!e) return; const isl=islandOf[code]; selected={type:'entry', code}; linesMuted=false;
   if (has3D && fly && buildings[code]){ const p=new THREE.Vector3(); buildings[code].getWorldPosition(p); flyTo(p, 11, 1.05); }
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===isl.id));
   const related = LINKS.filter(L=>L[0]===code||L[1]===code).map(L=>{ const other=L[0]===code?L[1]:L[0]; return `<button data-go="${other}" title="${esc(L[2])}">${esc(other)} ${esc(byCode[other].title)}</button>`; }).join('');
@@ -823,7 +824,7 @@ document.addEventListener('click', e=>{
 });
 $('#card-close').addEventListener('click', closeCard);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(!$('#help').hidden) toggleHelp(false); else if(!$('#results').hidden) hideResults(); else if(!$('#card').hidden) closeCard(); } });
-$('#btn-links').addEventListener('click', e=>{ showLinks=!showLinks; e.currentTarget.setAttribute('aria-pressed', showLinks); refreshLinks(); if(showLinks) toast(`顯示 ${LINKS.length} 條魔法連線（先備 → 後續）`); });
+$('#btn-links').addEventListener('click', e=>{ showLinks=!showLinks; linesMuted=!showLinks; e.currentTarget.setAttribute('aria-pressed', showLinks); refreshLinks(); toast(showLinks ? `顯示 ${LINKS.length} 條魔法連線（先備 → 後續）` : '已隱藏魔法連線；點選條目時會再顯示該條目的連線'); });
 $('#btn-drawer').addEventListener('click', e=>{ const d=$('#drawer'); d.hidden=!d.hidden; e.currentTarget.setAttribute('aria-pressed', !d.hidden); if(!d.hidden){ renderIslandList(); if(innerWidth<=760){ $('#card').hidden=true; $('#live').hidden=true; $('#btn-live').setAttribute('aria-pressed','false'); } } });
 $('#btn-live').addEventListener('click', e=>{ const l=$('#live'); l.hidden=!l.hidden; e.currentTarget.setAttribute('aria-pressed', !l.hidden); if(!l.hidden && innerWidth<=760){ $('#card').hidden=true; $('#drawer').hidden=true; } });
 function toggleHelp(on){ $('#help').hidden=!on; $('#backdrop').hidden=!on; }
