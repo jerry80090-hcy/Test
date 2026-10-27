@@ -227,7 +227,7 @@ mjx-container{overflow-x:auto;max-width:100%}
       <p>這座微縮模型把 108 課綱高中數學的 84 個學習內容條目，依主題分配到 15 座六角形小島上，每棟小建築就是一個條目。版面與互動致敬台北市長參選人沈伯洋的「HEART 政策島」：主題島、關鍵字搜尋、條目間的協作連線，以及一位巡島的小人偶，這裡換成在各島講台上演講的小巫師。配色取夜晚的天文塔：深藍夜空、燭光金與火紅重點。</p>
       <ul>
         <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
-        <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座城堡坐落在山體上，台地之間是窄谷，黑湖是山腳東南側的湖盆，活米村車站在湖的對岸。</li>
+        <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座學院立在一座主峰的山頂平台上，山坡向四面落下，外圍的山脈都比學院低；台地之間是窄谷，黑湖是山頂東南側的高山湖，車站在湖的對岸。</li>
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
         <li><b>即時資訊</b>：時鐘、學年週次（以 9 月 1 日起算）、學測倒數（預設 2027-01-22，為估計值，請依大考中心公告修改）、每日輪替的「今日條目」。</li>
@@ -342,10 +342,10 @@ function typeset(el){
 }
 
 /* ---------------- 3D ---------------- */
-const R = 4.2, TOP = 1.3, SPACING = 1.22;
+const R = 4.2, TOP = 1.3, SPACING = 1.22, PL = 14;   // PL: height of the summit plateau the academy stands on
 const has3D = !!window.THREE;
 let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, linkObjs=[], wizard=null, podium={}, pickables=[];
-const camState = { theta:0.78, phi:1.1, radius:64, target: has3D ? new THREE.Vector3(0,0,0) : null };
+const camState = { theta:0.78, phi:1.12, radius:70, target: has3D ? new THREE.Vector3(0,0,0) : null };
 let fly=null, lastInteract=performance.now();
 
 function hexPos(q,r){ return { x: SPACING*R*Math.sqrt(3)*(q + r/2), z: SPACING*R*1.5*r }; }
@@ -529,8 +529,8 @@ function makeLandmark(kind, isl){
 }
 
 function buildIsland(isl){
-  const p=hexPos(isl.q,isl.r); const g=new THREE.Group(); const elev=isl.elev||0; g.position.set(p.x,elev,p.z);
-  const castle = elev>0;
+  const p=hexPos(isl.q,isl.r); const g=new THREE.Group(); const elev=(isl.elev||0)+PL; g.position.set(p.x,elev,p.z);
+  const castle = (isl.elev||0)>0;
   const grassCol = new THREE.Color(isl.grass).multiplyScalar(0.62);
   g.add(mesh(new THREE.CylinderGeometry(R*1.06,R*0.98,0.3,6), mat(castle?0x6d6f7a:0x8a7a56), 0,0.95,0));
   const grass=mesh(new THREE.CylinderGeometry(R,R,0.5,6), mat(grassCol,{roughness:.95}), 0,TOP-0.25,0); g.add(grass);
@@ -562,17 +562,19 @@ function terrainParts(x,z){
   let ped=-99; for(const q of ISLPOS){ const d=Math.hypot(x-q.x,z-q.z); const v=q.top-4.0*Math.max(0,d-R*0.85); if(v>ped) ped=v; }
   // base hill: inverse-distance blend of (island top − 1.8) so the massif follows the staircase and leaves ravines
   let wsum=0, hsum=0; for(const q of ISLPOS){ const d2=(x-q.x)*(x-q.x)+(z-q.z)*(z-q.z); const w=1/((d2+4)*(d2+4)); wsum+=w; hsum+=w*(q.top-2.5); }
-  let ground=Math.max(0.9, hsum/wsum);
-  // low-ground islands (pitch, greenhouses, forest, station) sit on a flat meadow shelf
-  for(const q of ISLPOS){ if(q.top>1) continue; const d=Math.hypot(x-q.x,z-q.z); if(d<R*1.5){ const k=Math.max(0,Math.min(1,(d-R)/(R*0.5))); ground = ground*k + Math.min(ground,0.75)*(1-k); } }
-  // outer mountains
-  const d=Math.hypot(x-TC.x, z-TC.z);
-  { const k=Math.max(0,Math.min(1,(d-22)/14)); ground += k*k*(3-2*k)*Math.min(6, Math.max(0, -(z-TC.z-6))*0.14); }   // the massif keeps climbing to the north
-  if (d>36){ const t=Math.min(1,(d-36)/30), rise=t*t*(3-2*t); const n=vnoise(x*0.045,z*0.045)*0.65+vnoise(x*0.11,z*0.11)*0.35; const peaks=Math.max(0,d-64)*0.17*(0.5+0.9*vnoise(x*0.018+5,z*0.018+5)); ground += rise*(8+15*n) + peaks; }
-  ground += 0.6*vnoise(x*0.3,z*0.3)*(d>30?1:0.25);   // gentle roughness
-  // lake basin in the south-east
+  let plateau=Math.max(PL+0.9, hsum/wsum);
+  // low-ground islands (pitch, greenhouses, forest, station) sit on a flat meadow shelf of the summit
+  for(const q of ISLPOS){ if(q.top>PL+1) continue; const d=Math.hypot(x-q.x,z-q.z); if(d<R*1.5){ const k=Math.max(0,Math.min(1,(d-R)/(R*0.5))); plateau = plateau*k + Math.min(plateau,PL+0.75)*(1-k); } }
+  // mountain tarn beside the academy (south-east)
   const ex=(x-LAKE.x)/LAKE.rx, ez=(z-LAKE.z)/LAKE.rz, e=ex*ex+ez*ez;
-  if (e<1){ ground -= 4.2*Math.pow(1-e,0.6); }
+  if (e<1){ plateau -= 4.2*Math.pow(1-e,0.6); }
+  // the summit falls away on every side; lower ranges stand further out
+  const d=Math.hypot(x-TC.x, z-TC.z);
+  const n=vnoise(x*0.045,z*0.045)*0.65+vnoise(x*0.11,z*0.11)*0.35;
+  let low=0.9; if (d>40){ const t=Math.min(1,(d-40)/40), rise=t*t*(3-2*t); const peaks=Math.max(0,d-70)*0.12*(0.4+0.9*vnoise(x*0.018+5,z*0.018+5)); low += Math.min(PL-1, rise*(3+7*n) + peaks); }
+  const kk=Math.max(0,Math.min(1,(d-34)/40)), flank=1-kk*kk*(3-2*kk);
+  let ground = plateau*flank + low*(1-flank) + (d>34 ? 1.6*n*flank*(1-flank)*4 : 0);   // rocky shoulders on the way down
+  ground += 0.6*vnoise(x*0.3,z*0.3)*(d>30?1:0.25);   // gentle roughness
   return {ground, ped, inLake:e<1};
 }
 function terrainH(x,z){ const t=terrainParts(x,z); return Math.max(t.ground, t.ped); }
@@ -583,7 +585,7 @@ function buildTerrain(){
     for(let i=0;i<pos.count;i++){ const x=pos.getX(i)+TC.x, z=-pos.getY(i)+TC.z; const parts=terrainParts(x,z); let h=Math.max(parts.ground, parts.ped);
       const dd=Math.hypot(x-TC.x,z-TC.z); if (drop){ const k=Math.max(0,Math.min(1,(48-dd)/4)); h-=0.8*k; } pos.setZ(i,h);
       const slope=vnoise(x*0.5,z*0.5);
-      if (h<1.1) tmp.copy(sand); else if (h<7 && dd<40) tmp.copy(grass).lerp(mid, Math.min(1,(h-1)/6)*0.7+slope*0.2); else { const k=Math.max(0,Math.min(1,(h-6)/26)); if (k<0.6) tmp.copy(lo).lerp(mid,k/0.6); else tmp.copy(mid).lerp(hi,(k-0.6)/0.4); }
+      if (parts.inLake && h<PL+0.5) tmp.copy(sand); else if (dd<40) tmp.copy(grass).lerp(mid, Math.max(0,Math.min(1,(h-PL-1)/6))*0.7+slope*0.2); else if (dd<70) tmp.copy(mid).lerp(lo, Math.max(0,Math.min(1,(PL-h)/PL))); else { const k=Math.max(0,Math.min(1,(h-5)/14)); if (k<0.6) tmp.copy(lo).lerp(mid,k/0.6); else tmp.copy(mid).lerp(hi,(k-0.6)/0.4); }
       col[i*3]=tmp.r; col[i*3+1]=tmp.g; col[i*3+2]=tmp.b; }
     geo.setAttribute('color', new THREE.BufferAttribute(col,3)); geo.rotateX(-Math.PI/2); geo.translate(TC.x,0,TC.z); geo.computeVertexNormals();
     const m=new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors:true, flatShading:true, roughness:1, metalness:0})); m.receiveShadow=true; m.castShadow=false; scene.add(m); return m;
@@ -592,15 +594,15 @@ function buildTerrain(){
   makePlane(new THREE.RingGeometry(0.05,48,240,90), false);        // fine disk: castle massif, ravines, lake shore
   // trees on the slopes and around the castle foot
   const rs=seeded(23); let placed=0;
-  for(let i=0;i<400 && placed<130;i++){ const a=rs()*Math.PI*2, d=8+rs()*62; const x=TC.x+Math.cos(a)*d, z=TC.z+Math.sin(a)*d; const t=terrainParts(x,z); const h=Math.max(t.ground,t.ped);
-    if (t.inLake || h<1.0 || h>19 || t.ped>t.ground-0.2) continue; if (ISLPOS.some(q=>Math.hypot(x-q.x,z-q.z)<R*1.15)) continue;
+  for(let i=0;i<400 && placed<130;i++){ const a=rs()*Math.PI*2, d=8+rs()*70; const x=TC.x+Math.cos(a)*d, z=TC.z+Math.sin(a)*d; const t=terrainParts(x,z); const h=Math.max(t.ground,t.ped);
+    if (t.inLake || h<2.0 || h>PL+6 || t.ped>t.ground-0.2) continue; if (ISLPOS.some(q=>Math.hypot(x-q.x,z-q.z)<R*1.15)) continue;
     const tr=tree(0,0,1.1+rs()*1.3,true); tr.position.set(x,h-TOP-0.1,z); scene.add(tr); placed++; }
 }
 function buildViaducts(){
   const stone=mat(0x7b7e8a,{roughness:.95,flatShading:true}); const dirs=[[1,0],[0,1],[1,-1]];
   ISLANDS.forEach(A=>{ if(!(A.elev>0)) return; dirs.forEach(([dq,dr])=>{ const B=ISLANDS.find(i=>i.q===A.q+dq && i.r===A.r+dr && i.elev>0); if(!B) return;
     const pa=hexPos(A.q,A.r), pb=hexPos(B.q,B.r); const u=new THREE.Vector3(pb.x-pa.x,0,pb.z-pa.z).normalize(); const ap=R*0.866;
-    const ea=new THREE.Vector3(pa.x,A.elev+TOP,pa.z).addScaledVector(u,ap-0.6), eb=new THREE.Vector3(pb.x,B.elev+TOP,pb.z).addScaledVector(u,-(ap-0.6));
+    const ea=new THREE.Vector3(pa.x,A.elev+PL+TOP,pa.z).addScaledVector(u,ap-0.6), eb=new THREE.Vector3(pb.x,B.elev+PL+TOP,pb.z).addScaledVector(u,-(ap-0.6));
     const dir=eb.clone().sub(ea); const len=ea.distanceTo(eb); const grp=new THREE.Group(); grp.position.copy(ea.clone().add(eb).multiplyScalar(0.5)); grp.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), dir.clone().normalize());
     grp.add(mesh(new THREE.BoxGeometry(len,0.3,1.0), stone, 0,0,0)); grp.add(mesh(new THREE.BoxGeometry(len,0.25,0.1), stone, 0,0.25,0.45)); grp.add(mesh(new THREE.BoxGeometry(len,0.25,0.1), stone, 0,0.25,-0.45));
     scene.add(grp);
@@ -690,22 +692,23 @@ function init3D(){
   sun=new THREE.DirectionalLight(0xc3d2ff, 0.75); sun.position.set(-40,55,-30); sun.castShadow=true; sun.shadow.mapSize.set(2048,2048);   // moonlight
   Object.assign(sun.shadow.camera,{left:-70,right:70,top:70,bottom:-70,near:5,far:220}); sun.shadow.bias=-0.0004; sun.shadow.camera.updateProjectionMatrix(); scene.add(sun);
   const fill=new THREE.DirectionalLight(0xffc37a, 0.22); fill.position.set(30,18,30); scene.add(fill);   // faint candle warmth from the south-east
-  water=new THREE.Mesh(new THREE.PlaneGeometry(600,600), new THREE.MeshStandardMaterial({color:0x0c2436, roughness:.25, metalness:.3})); water.rotation.x=-Math.PI/2; water.position.y=0.6; water.receiveShadow=true; scene.add(water);
+  const sea=new THREE.Mesh(new THREE.PlaneGeometry(600,600), new THREE.MeshStandardMaterial({color:0x0c2436, roughness:.25, metalness:.3})); sea.rotation.x=-Math.PI/2; sea.position.y=0.6; scene.add(sea);
+  water=new THREE.Mesh(new THREE.CircleGeometry(1,64), new THREE.MeshStandardMaterial({color:0x0c2436, roughness:.2, metalness:.35})); water.rotation.x=-Math.PI/2; water.scale.set(LAKE.rx,LAKE.rz,1); water.position.set(LAKE.x, PL+0.6, LAKE.z); water.receiveShadow=true; scene.add(water);   // mountain tarn
   // stars and moon
   { const n=900, pos=new Float32Array(n*3), rs=seeded(11); for(let i=0;i<n;i++){ const th=rs()*Math.PI*2, ph=Math.acos(rs()*0.85); const rr=180; pos[i*3]=Math.cos(th)*Math.sin(ph)*rr; pos[i*3+1]=Math.cos(ph)*rr+5; pos[i*3+2]=Math.sin(th)*Math.sin(ph)*rr; }
     const sg=new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos,3)); const stars=new THREE.Points(sg, new THREE.PointsMaterial({color:0xdfe6ff, size:0.9, sizeAttenuation:true, fog:false})); scene.add(stars); anim.push(t=>{ stars.rotation.y=t*0.004; });
     const moon=new THREE.Mesh(new THREE.SphereGeometry(5,20,20), new THREE.MeshBasicMaterial({color:0xe9eeff, fog:false})); moon.position.set(-110,95,-120); scene.add(moon);
     const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); }
   // little boats drifting in the channels
-  const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); let bx=7,bz=16; for(let k=0;k<20;k++){ const a=rnd()*Math.PI*2, rr=3+rnd()*7; bx=7+Math.cos(a)*rr*1.3; bz=16+Math.sin(a)*rr*0.8; if (Math.hypot(bx-8.9,bz-15.4)>5.2) break; } b.position.set(bx, 0.6, bz); b.rotation.y=rnd()*Math.PI*2; scene.add(b); anim.push(t=>{ b.position.y=0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
-  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(TC.x, 3.5, TC.z-1); }
-  ISLPOS = ISLANDS.map(i=>{ const p=hexPos(i.q,i.r); return {x:p.x, z:p.z, top:(i.elev||0)+0.55}; });
+  const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); let bx=7,bz=16; for(let k=0;k<20;k++){ const a=rnd()*Math.PI*2, rr=3+rnd()*7; bx=7+Math.cos(a)*rr*1.3; bz=16+Math.sin(a)*rr*0.8; if (Math.hypot(bx-8.9,bz-15.4)>5.2) break; } b.position.set(bx, PL+0.6, bz); b.rotation.y=rnd()*Math.PI*2; scene.add(b); anim.push(t=>{ b.position.y=PL+0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
+  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(TC.x, PL+3.5, TC.z-1); }
+  ISLPOS = ISLANDS.map(i=>{ const p=hexPos(i.q,i.r); return {x:p.x, z:p.z, top:(i.elev||0)+PL+0.55}; });
   ISLANDS.forEach(buildIsland); buildLinks(); buildViaducts(); buildTerrain();
   wizard=makeWizard(); scene.add(wizard);
   wiz.idx = Math.floor(dayOfYear()/1) % ISLANDS.length; wiz.t0=performance.now(); updateWizardNote();
   raycaster=new THREE.Raycaster();
   // labels
-  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0), p.z)}); });
+  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0)+PL, p.z)}); });
   resize(); applySceneTheme(); refreshLabels();
   addEventListener('resize', resize);
   setupPointer(canvas);
@@ -733,7 +736,7 @@ function loop(now){
   if (clockHands.length){ const d=new Date(); clockHands[0].rotation.z = -((d.getHours()%12)+d.getMinutes()/60)*Math.PI/6; clockHands[1].rotation.z = -(d.getMinutes()+d.getSeconds()/60)*Math.PI/30; }
   linkObjs.forEach(L=>{ if(L.spark.visible){ L.spark.position.copy(L.curve.getPointAt((t*0.12+L.ph)%1)); } });
   wizardTick(now, dt);
-  water.position.y = 0.6 + Math.sin(t*0.8)*0.03;
+  water.position.y = PL+0.6 + Math.sin(t*0.8)*0.03;
   renderer.render(scene, camera);
   refreshLabels();
 }
@@ -764,7 +767,7 @@ function pick(e){ const d=castAt(e); if(!d) return; if(d.code) selectEntry(d.cod
 /* ---------------- selection & cards ---------------- */
 function selectIsland(id, fly){
   const isl=ISLANDS.find(i=>i.id===id); if(!isl) return; selected={type:'island', id};
-  if (has3D && fly){ const p=hexPos(isl.q,isl.r); flyTo(new THREE.Vector3(p.x,TOP+(isl.elev||0),p.z), 20, 0.98); }
+  if (has3D && fly){ const p=hexPos(isl.q,isl.r); flyTo(new THREE.Vector3(p.x,TOP+(isl.elev||0)+PL,p.z), 20, 0.98); }
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===id));
   const done=doneCount(isl.entries);
   const h = `
