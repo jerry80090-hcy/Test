@@ -40,6 +40,7 @@ button{cursor:pointer}
 .lbl.active{background:var(--accent);color:var(--accent-ink);border-color:var(--gold)}
 .lbl.active small{color:var(--accent-ink);opacity:.85}
 .lbl.dim{opacity:.35}
+.lbl.lit{box-shadow:0 3px 0 var(--gold-soft),0 0 26px var(--gold);border-color:#fff1c2}
 #tip{position:absolute;z-index:4;pointer-events:none;background:var(--ink);color:var(--panel);padding:4px 9px;border-radius:5px;font-size:13px;white-space:nowrap;transform:translate(-50%,-140%)}
 /* header */
 #topbar{position:absolute;z-index:5;top:env(safe-area-inset-top,0px);left:0;right:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
@@ -357,7 +358,7 @@ function typeset(el){
 /* ---------------- 3D ---------------- */
 const R = 4.2, TOP = 1.3, SPACING = 1.22, PL = 0;   // tile elevations are absolute above the plain
 const has3D = !!window.THREE;
-let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, linkObjs=[], wizard=null, podium={}, pickables=[];
+let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, islandGlow={}, linkObjs=[], wizard=null, podium={}, pickables=[];
 const camState = { theta:0.12, phi:1.22, radius:68, target: has3D ? new THREE.Vector3(0,0,0) : null };
 let fly=null, lastInteract=performance.now();
 
@@ -370,7 +371,7 @@ function seeded(seed){ let s=seed*9301+49297; return ()=>{ s=(s*9301+49297)%2332
 function makeWindows(parent, w, h, d, count, course){
   const wins=[]; const g=new THREE.BoxGeometry(0.13,0.3,0.05);
   for(let i=0;i<count;i++){
-    const m=new THREE.MeshStandardMaterial({color:0xffe9b0, emissive:0xffc966, emissiveIntensity:.2, roughness:.4});
+    const m=new THREE.MeshStandardMaterial({color:0xffe9b0, emissive:0xffc966, emissiveIntensity:.2, roughness:.4}); m.userData.isWin=true;
     const wmesh=new THREE.Mesh(g,m); wmesh.castShadow=false;
     const row=Math.floor(i/2), col=i%2;
     wmesh.position.set((col?0.2:-0.2), 0.35+row*0.5, d/2+0.01);
@@ -543,6 +544,7 @@ function buildIsland(isl){
   const grassCol = new THREE.Color(isl.grass).multiplyScalar(0.62);
   g.add(mesh(new THREE.CylinderGeometry(R*1.06,R*0.98,0.3,6), mat(0x7d8090), 0,0.95,0));
   const grass=mesh(new THREE.CylinderGeometry(R,R,0.5,6), mat(grassCol,{roughness:.95}), 0,TOP-0.25,0); g.add(grass);
+  const glow=new THREE.Mesh(new THREE.CylinderGeometry(R*1.09,R*1.09,0.14,6,1,true), new THREE.MeshStandardMaterial({color:0xd9b35b, emissive:0xd9b35b, emissiveIntensity:1.6, transparent:true, opacity:.9, side:THREE.DoubleSide})); glow.position.y=TOP+0.05; glow.visible=false; g.add(glow); islandGlow[isl.id]=glow;
   g.add(mesh(new THREE.CylinderGeometry(R*0.97,R*0.86,2.2,6), mat(0x5a5e6c,{roughness:1,flatShading:true}), 0,-0.2,0));
   // trees at 5 of the 6 vertices (front vertex reserved for the podium)
   const rnd=seeded(isl.q*31+isl.r*17+100);
@@ -713,17 +715,24 @@ function refreshWindows(){
   const lamp=parseFloat(cssVar('--lamp'))||0.25;
   Object.entries(buildings).forEach(([code,b])=>{
     const s=progress[code]||0; const base = s===2 ? 1.4 : s===1 ? 0.8 : 0.15;
-    b.userData.wins.forEach(m=>{ m.emissiveIntensity = base*lamp + (s?0.3:0); m.emissive.setHex(s===1?0xffb347:0xffc966); });
+    b.userData.wins.forEach(m=>{ m.emissiveIntensity = b.userData.lit ? 3.0 : base*lamp + (s?0.3:0); m.emissive.setHex(s===1?0xffb347:0xffc966); });
   });
 }
 function refreshDim(){
   const any = courseFilter || searchTerm;
+  const hl = courseFilter ? COURSE[courseFilter].hex : 0xd9b35b;   // course colour, or gold for a search
   Object.entries(buildings).forEach(([code,b])=>{
-    const on = !any || entryMatches(byCode[code]);
-    b.traverse(o=>{ if(o.material && !o.userData.isWin){ o.material.transparent = !on; o.material.opacity = on?1:0.18; } });
-    b.scale.setScalar(on?1:0.7);
+    const on = !any || entryMatches(byCode[code]); const lit = any && on;
+    b.traverse(o=>{ if(!o.material) return; const m=o.material; if(m.userData.isWin) return;
+      if (m.userData.baseEm===undefined){ m.userData.baseEm=m.emissive?m.emissive.getHex():0; m.userData.baseEmI=m.emissiveIntensity||0; }
+      m.transparent = !on; m.opacity = on?1:0.22;
+      if (m.emissive){ if (lit){ m.emissive.setHex(hl); m.emissiveIntensity=0.55; } else { m.emissive.setHex(m.userData.baseEm); m.emissiveIntensity=m.userData.baseEmI; } } });
+    b.userData.wins.forEach(w=>{ w.emissiveIntensity = lit ? 3.0 : null; }); b.userData.lit=lit;
+    b.scale.setScalar(on?1:0.75);
   });
-  labels.forEach(l=>{ const isl=l.isl; const cnt=isl.entries.filter(c=>entryMatches(byCode[c])).length; l.el.classList.toggle('dim', !!any && cnt===0); });
+  refreshWindows();
+  labels.forEach(l=>{ const isl=l.isl; const cnt=isl.entries.filter(c=>entryMatches(byCode[c])).length; l.el.classList.toggle('dim', !!any && cnt===0); l.el.classList.toggle('lit', !!any && cnt>0);
+    const g=islandGlow[isl.id]; if(g){ g.visible = !!any && cnt>0; g.material.color.setHex(hl); g.material.emissive.setHex(hl); } });
 }
 function refreshLinks(){
   linkObjs.forEach(L=>{
