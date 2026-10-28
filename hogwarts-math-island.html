@@ -235,7 +235,7 @@ mjx-container{overflow-x:auto;max-width:100%}
       <p>這座微縮模型把 108 課綱高中數學的 84 個學習內容條目，依主題分配到 15 座六角形小島上，每棟小建築就是一個條目。版面與互動致敬台北市長參選人沈伯洋的「HEART 政策島」：主題島、關鍵字搜尋、條目間的協作連線，以及一位巡島的小人偶，這裡換成在各島講台上演講的小巫師。配色取夜晚的天文塔：深藍夜空、燭光金與火紅重點。</p>
       <ul>
         <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
-        <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座學院是三層同心的層城：核心是天文塔所在的最高台地，外面一圈六格是第二層，最外圈八格是第一層，每層邊緣有城牆、垛口與正南的城門，一道石脊從核心劈到第二層城門；城背靠著更高的山，正面向南敞開成平原，平原西南是黑湖，湖畔車站在湖邊。</li>
+        <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座學院是背靠山脈的層城：天文塔所在的核心台地貼著山壁，其餘台地向南一層層扇形展開（第二層四格、第三層七格、湖畔兩格），每層邊緣有城牆與垛口，中央的路穿過三道城門上到核心，一道石脊從核心劈到第二層；禁忌森林在東側山腰的一處平台。黑湖台地的水從城牆瀉入下方的湖，湖畔車站有碼頭伸進湖中，列車會從月台起飛繞湖一圈再回站。</li>
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教授／小巫師</b>：右上角切換身分。教授看到完整的條目內容（核心內容、學習目標、不考範圍、錯誤類型、評量、先備連結）與教學進度；小巫師看到的是改寫成學生語言的簡化版「我要學會」與「小心陷阱」，加上一題示意練習題，答案要自己按開。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
@@ -270,35 +270,35 @@ const COURSE = {
   '12乙':{name:'12 年級 乙',hex:0xe08a2e, css:'#e08a2e'}
 };
 const ISLANDS = [
- {id:'great-hall', name:'大禮堂', theme:'數與式', sub:'ℝ、|x−a|、a<sup>x</sup>、log x', q:0, r:1, elev:4.5, lh:7.2, grass:0x7fb35a, landmark:'hall',
+ {id:'great-hall', name:'大禮堂', theme:'數與式', sub:'ℝ、|x−a|、a<sup>x</sup>、log x', q:0, r:1, elev:8.5, lh:7.2, grass:0x7fb35a, landmark:'hall',
   blurb:'入學的第一堂課在這裡：數線上的每個點都是一個座位。', entries:['N-10-1','N-10-2','N-10-3','N-10-4','N-10-5','N-10-7']},
- {id:'library', name:'圖書館', theme:'集合與計數', sub:'A∩B、C(n,k)、σ', q:1, r:0, elev:4.5, lh:6.2, grass:0x86b964, landmark:'library',
+ {id:'library', name:'圖書館', theme:'集合與計數', sub:'A∩B、C(n,k)、σ', q:1, r:0, elev:8.5, lh:6.2, grass:0x86b964, landmark:'library',
   blurb:'書目是集合，排架是計數，借閱紀錄是數據。', entries:['D-10-1','D-10-2','D-10-3']},
- {id:'potions', name:'魔藥學地窖', theme:'多項式', sub:'f(x) = ax² + bx + c', q:-1, r:2, elev:0, lh:6.0, grass:0x6fa352, landmark:'cauldron',
+ {id:'potions', name:'魔藥學地窖', theme:'多項式', sub:'f(x) = ax² + bx + c', q:-1, r:2, elev:5, lh:6.0, grass:0x6fa352, landmark:'cauldron',
   blurb:'配方（配方法）與秤量係數，每一瓶多項式都要分解到底。', entries:['A-10-1','A-10-2','F-10-1','F-10-2','F-10-3']},
- {id:'clock', name:'鐘樓', theme:'三角比', sub:'sin θ、cos θ、θ rad', q:-1, r:1, elev:4.5, lh:8.0, grass:0x84b85e, landmark:'clock',
+ {id:'clock', name:'鐘樓', theme:'三角比', sub:'sin θ、cos θ、θ rad', q:-1, r:0, elev:8.5, lh:8.0, grass:0x84b85e, landmark:'clock',
   blurb:'指針掃過的每一個角，都可以用弧度量來計時。', entries:['G-10-5','G-10-6','G-10-7','N-11A-1','N-11B-1']},
- {id:'astronomy', name:'天文塔', theme:'坐標幾何', sub:'x²/a² + y²/b² = 1', q:0, r:0, elev:9, lh:10.0, grass:0x7cb05c, landmark:'astronomy',
+ {id:'astronomy', name:'天文塔', theme:'坐標幾何', sub:'x²/a² + y²/b² = 1', q:0, r:0, elev:12, lh:10.0, grass:0x7cb05c, landmark:'astronomy',
   blurb:'直線、圓與行星軌道：圓錐曲線在星空裡畫出自己的方程式。', entries:['G-10-1','G-10-2','G-10-3','G-10-4','S-11B-2','G-12甲-1']},
- {id:'staircase', name:'移動樓梯', theme:'數列與極限', sub:'a<sub>n</sub>、lim a<sub>n</sub>', q:0, r:2, elev:0, lh:6.6, grass:0x8dbd66, landmark:'stairs',
+ {id:'staircase', name:'移動樓梯', theme:'數列與極限', sub:'a<sub>n</sub>、lim a<sub>n</sub>', q:0, r:2, elev:5, lh:6.6, grass:0x8dbd66, landmark:'stairs',
   blurb:'一階接一階的遞迴，走到無窮處才知道樓梯通往何方。', entries:['N-10-6','N-12甲-1','N-12甲-2','N-12乙-2']},
- {id:'divination', name:'占卜塔', theme:'機率', sub:'P(A|B)、E(X)', q:1, r:-1, elev:4.5, lh:8.4, grass:0x79ad57, landmark:'divination',
+ {id:'divination', name:'占卜塔', theme:'機率', sub:'P(A|B)、E(X)', q:2, r:0, elev:5, lh:8.4, grass:0x79ad57, landmark:'divination',
   blurb:'北塔頂的水晶球裡沒有命運，只有條件機率與期望值。', entries:['D-10-4','D-11A-1','D-11A-2','D-11A-3','D-11B-1','D-11B-2','D-12甲-1','D-12甲-2','D-12乙-1','D-12乙-2']},
- {id:'greenhouse', name:'溫室', theme:'指對數函數', sub:'y = a<sup>x</sup>、log<sub>a</sub> x', q:2, r:0, elev:0, lh:5.4, grass:0x8cc46a, landmark:'greenhouse',
+ {id:'greenhouse', name:'溫室', theme:'指對數函數', sub:'y = a<sup>x</sup>、log<sub>a</sub> x', q:-2, r:2, elev:5, lh:5.4, grass:0x8cc46a, landmark:'greenhouse',
   blurb:'魔法植物按比例成長，記錄它的是指數函數；讀懂它的是對數。', entries:['A-11A-4','F-11A-4','F-11B-2']},
- {id:'transfig', name:'變形學教室', theme:'矩陣與方程組', sub:'A<b>x</b> = <b>b</b>、det A', q:-1, r:0, elev:4.5, lh:6.4, grass:0x7ab25a, landmark:'transfig',
+ {id:'transfig', name:'變形學教室', theme:'矩陣與方程組', sub:'A<b>x</b> = <b>b</b>、det A', q:-1, r:1, elev:8.5, lh:6.4, grass:0x7ab25a, landmark:'transfig',
   blurb:'矩陣把一個圖形變成另一個圖形，方程組則告訴你變形是否可逆。', entries:['A-11A-1','A-11A-2','A-11A-3','F-11A-3','A-11B-1','A-12乙-1']},
- {id:'quidditch', name:'飛行競技場', theme:'平面向量', sub:'<b>a</b>·<b>b</b> = |<b>a</b>||<b>b</b>|cos θ', q:-2, r:1, elev:0, lh:6.2, grass:0x6ea84f, landmark:'quidditch',
+ {id:'quidditch', name:'飛行競技場', theme:'平面向量', sub:'<b>a</b>·<b>b</b> = |<b>a</b>||<b>b</b>|cos θ', q:-2, r:1, elev:5, lh:6.2, grass:0x6ea84f, landmark:'quidditch',
   blurb:'城堡西側的競技場：每一次飛行都是向量，有大小、有方向，還有內積決定的夾角。', entries:['G-11A-1','G-11A-4','G-11A-6','G-11B-1','G-11B-2','G-11B-3']},
- {id:'lake', name:'黑湖', theme:'三角函數', sub:'y = A sin(ωx + φ)', q:1, r:1, elev:0, lh:5.6, grass:0x7db860, landmark:'lake',
+ {id:'lake', name:'黑湖', theme:'三角函數', sub:'y = A sin(ωx + φ)', q:-2, r:3, elev:2, lh:5.6, grass:0x7db860, landmark:'lake',
   blurb:'城堡南面的湖：湖面的波紋是正弦函數，疊合之後仍是同頻的波。', entries:['G-11A-5','F-11A-1','F-11A-2','F-11B-1']},
- {id:'forest', name:'禁忌森林', theme:'空間幾何', sub:'<b>a</b>×<b>b</b>、ax + by + cz = d', q:2, r:-1, elev:0, lh:6.0, grass:0x5e9448, landmark:'forest',
+ {id:'forest', name:'禁忌森林', theme:'空間幾何', sub:'<b>a</b>×<b>b</b>、ax + by + cz = d', q:2, r:-1, elev:6.5, lh:6.0, grass:0x5e9448, landmark:'forest',
   blurb:'城堡東側、守林人小屋之後：走進三維，空間中的點、線、面，與外積指向的方向。', entries:['S-11A-1','G-11A-2','G-11A-3','G-11A-7','G-11A-8','G-11A-9','G-11A-10','S-11B-1','G-11B-4']},
- {id:'station', name:'湖畔車站', theme:'積分', sub:'∫<sub>a</sub><sup>b</sup> f(x) dx', q:-2, r:2, elev:0, lh:5.4, grass:0x89bb64, landmark:'station',
+ {id:'station', name:'湖畔車站', theme:'積分', sub:'∫<sub>a</sub><sup>b</sup> f(x) dx', q:-1, r:3, elev:2, lh:5.4, grass:0x89bb64, landmark:'station',
   blurb:'湖的對岸、通往山下的車站：列車累積每一段位移，黎曼和把它們加總成積分。', entries:['F-12甲-5','F-12甲-6','F-12甲-7','F-12乙-5','F-12乙-6']},
- {id:'requirement', name:'如願室', theme:'極限與微分', sub:'f′(x)、lim<sub>x→a</sub>', q:0, r:-1, elev:4.5, lh:6.2, grass:0x80b45e, landmark:'door',
+ {id:'requirement', name:'如願室', theme:'極限與微分', sub:'f′(x)、lim<sub>x→a</sub>', q:-2, r:0, elev:5, lh:6.2, grass:0x80b45e, landmark:'door',
   blurb:'你需要什麼，函數就給你什麼：極限、連續、切線斜率。', entries:['F-12甲-1','F-12甲-2','F-12甲-3','F-12甲-4','F-12乙-1','F-12乙-2','F-12乙-3','F-12乙-4']},
- {id:'mirror', name:'真實之鏡廳', theme:'複數', sub:'z = a + bi、|z|', q:-2, r:0, elev:0, lh:5.8, grass:0x86b566, landmark:'mirror',
+ {id:'mirror', name:'真實之鏡廳', theme:'複數', sub:'z = a + bi、|z|', q:1, r:1, elev:5, lh:5.8, grass:0x86b566, landmark:'mirror',
   blurb:'鏡中出現的根不在實數線上：複數平面與虛根成對。', entries:['N-12甲-3','A-12甲-1','N-12乙-1','A-12乙-2']}
 ];
 const LINKS = [
@@ -355,12 +355,10 @@ function typeset(el){
 }
 
 /* ---------------- 3D ---------------- */
-const R = 4.2, TOP = 1.3, SPACING = 1.22, PL = 4;   // PL: height of the first terrace above the plain
-const TIER=[9,4.5,0];                                 // terrace height by ring (centre, ring 1, ring 2)
-const ringOf = i => Math.max(Math.abs(i.q), Math.abs(i.r), Math.abs(i.q+i.r));
+const R = 4.2, TOP = 1.3, SPACING = 1.22, PL = 0;   // tile elevations are absolute above the plain
 const has3D = !!window.THREE;
 let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, linkObjs=[], wizard=null, podium={}, pickables=[];
-const camState = { theta:0.12, phi:1.25, radius:64, target: has3D ? new THREE.Vector3(0,0,0) : null };
+const camState = { theta:0.12, phi:1.22, radius:68, target: has3D ? new THREE.Vector3(0,0,0) : null };
 let fly=null, lastInteract=performance.now();
 
 function hexPos(q,r){ return { x: SPACING*R*Math.sqrt(3)*(q + r/2), z: SPACING*R*1.5*r }; }
@@ -518,11 +516,7 @@ function makeLandmark(kind, isl){
       add(mesh(new THREE.BoxGeometry(3.4,0.25,1.0), stone, 0,0.12,0.6));
       add(mesh(new THREE.BoxGeometry(1.4,0.9,0.8), mat(0x6b4b3c), 0,0.7,0.95)); add(ridge(1.6, 0.9, 0.5, slate, 0, 1.15, 0.95)); add(mesh(new THREE.BoxGeometry(0.14,0.4,0.14), stone, 0.5,1.5,0.95));
       const rail=add(mesh(new THREE.BoxGeometry(3.8,0.06,0.5), mat(0x5a4636), 0,0.03,-0.4));
-      const train=new THREE.Group(); train.add(mesh(new THREE.BoxGeometry(0.9,0.5,0.4), mat(0xb8323a), 0,0.35,0)); const boiler=mesh(new THREE.CylinderGeometry(0.17,0.17,0.5,10), mat(0x2b2b2b), 0.25,0.42,0); boiler.rotation.z=Math.PI/2; train.add(boiler); train.add(mesh(new THREE.BoxGeometry(0.3,0.3,0.36), mat(0x2b2b2b), -0.3,0.75,0)); train.add(mesh(new THREE.BoxGeometry(0.7,0.4,0.36), mat(0x6f8a4a), -1.0,0.32,0));
-      [-0.3,0.2,-0.8,-1.2].forEach(x=>{ const wh=mesh(new THREE.CylinderGeometry(0.1,0.1,0.44,8), mat(0x111), x,0.1,0); wh.rotation.x=Math.PI/2; train.add(wh); });
-      train.position.set(0,0,-0.4); add(train);
-      const puff=add(new THREE.Mesh(new THREE.SphereGeometry(0.14,8,8), new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.7})));
-      anim.push(t=>{ const x=Math.sin(t*0.5)*1.3; train.position.x=x; train.scale.x = Math.cos(t*0.5)>=0?1:-1; puff.position.set(x-0.3*train.scale.x, 1.1+((t*0.8)%0.8), -0.4); puff.material.opacity=0.7-((t*0.8)%0.8)*0.8; });
+      add(mesh(new THREE.BoxGeometry(0.12,1.2,0.12), mat(0x6b4a2a), -1.5,0.6,-0.9)); add(mesh(new THREE.SphereGeometry(0.12,8,8), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:1.8}), -1.5,1.25,-0.9));
       break; }
     case 'door': {
       add(mesh(new THREE.BoxGeometry(2.2,2.4,0.5), stone, 0,1.2,0));
@@ -569,23 +563,27 @@ function buildIsland(isl){
 const TC={x:0,z:0};
 function hash2(x,z){ const v=Math.sin(x*127.1+z*311.7)*43758.5453; return v-Math.floor(v); }
 function vnoise(x,z){ const xi=Math.floor(x), zi=Math.floor(z), xf=x-xi, zf=z-zi; const u=xf*xf*(3-2*xf), v=zf*zf*(3-2*zf); const a=hash2(xi,zi), b=hash2(xi+1,zi), c=hash2(xi,zi+1), d=hash2(xi+1,zi+1); return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v; }
-const LAKE={x:-8,z:27,rx:12,rz:7};
+const LAKE={x:-2,z:33,rx:14,rz:7.5};
 let ISLPOS=[];
 function hexRound(fq, fr){ const fs=-fq-fr; let q=Math.round(fq), r=Math.round(fr), sq=Math.round(fs); const dq=Math.abs(q-fq), dr=Math.abs(r-fr), ds=Math.abs(sq-fs); if(dq>dr&&dq>ds) q=-r-sq; else if(dr>ds) r=-q-sq; return {q,r}; }
 function terrainParts(x,z){
-  const fr=z/(SPACING*R*1.5), fq=x/(SPACING*R*Math.sqrt(3))-fr/2; const h=hexRound(fq,fr); const k=Math.max(Math.abs(h.q),Math.abs(h.r),Math.abs(h.q+h.r));
+  const fr=z/(SPACING*R*1.5), fq=x/(SPACING*R*Math.sqrt(3))-fr/2; const h=hexRound(fq,fr); const isl=cellOf[h.q+','+h.r];
   const n=vnoise(x*0.045,z*0.045)*0.65+vnoise(x*0.11,z*0.11)*0.35;
-  // the mountain the city leans on: rises steeply to the north and wraps round the back
-  const back=Math.max(0, -z-9+0.35*Math.max(0,Math.abs(x)-12));
-  let mountain = back>0 ? PL+2+Math.min(26, back*1.6)+4*n*Math.min(1,back/6) : -99;
-  const d=Math.hypot(x,z); if (d>70) mountain=Math.max(mountain, 0.9+Math.min(12,(d-70)*0.22*(0.4+n)));   // distant hills
-  let ground;
-  if (k<=2){ const isl=cellOf[h.q+','+h.r]; ground = isl ? PL+TIER[k]-0.4 : Math.max(mountain, PL+TIER[k]+3+2*n); }   // terraces; empty cells are bare rock
-  else ground = 0.9+0.5*n;                                                                                           // the plain
-  ground=Math.max(ground, mountain);
+  // the range the citadel leans on: low shoulders right behind the top tile, climbing steeply further north and wrapping round
+  const back=Math.max(0, -z-4+0.35*Math.max(0,Math.abs(x)-14));
+  let mountain = back>0 ? 2+Math.min(32, back*2.0)+4*n*Math.min(1,back/5) : -99;
+  const d=Math.hypot(x,z); if (d>70) mountain=Math.max(mountain, 0.9+Math.min(12,(d-70)*0.22*(0.4+n)));
+  // inside a tile's own hexagon: a flat terrace. In the gap between two tiles of the same cell ring: the lower terrace. Elsewhere: plain or mountain.
+  const pc=hexPos(h.q,h.r); const Rc=R*1.03; const hn=Math.max(Math.abs(z-pc.z), 0.866*Math.abs(x-pc.x)+0.5*Math.abs(z-pc.z))/(Rc*0.866);
+  let ground; const plain=Math.max(0.9+0.5*n, mountain);
+  if (isl && hn<=1) ground = isl.elev+PL-0.4;
+  else {
+    let B=null, bd=1e9; for (const [dq,dr] of [[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]]){ const c=cellOf[(h.q+dq)+','+(h.r+dr)]; if(!c) continue; const pb=hexPos(c.q,c.r); const dd=Math.hypot(x-pb.x,z-pb.z); if(dd<bd){ bd=dd; B=c; } }
+    ground = (isl && B) ? Math.min(isl.elev,B.elev)+PL-0.4 : plain;
+  }
   const ex=(x-LAKE.x)/LAKE.rx, ez=(z-LAKE.z)/LAKE.rz, e=ex*ex+ez*ez;
-  if (e<1 && k>2){ ground -= 4.2*Math.pow(1-e,0.6); }
-  return {ground, ped:-99, inLake:e<1, k};
+  if (e<1 && !(isl && hn<=1)) ground -= 4.2*Math.pow(1-e,0.6);
+  return {ground, ped:-99, inLake:e<1, k: (isl && hn<=1)?0:3};
 }
 function terrainH(x,z){ const t=terrainParts(x,z); return t.ground; }
 function buildTerrain(){
@@ -595,7 +593,7 @@ function buildTerrain(){
     for(let i=0;i<pos.count;i++){ const x=pos.getX(i)+TC.x, z=-pos.getY(i)+TC.z; const parts=terrainParts(x,z); let h=parts.ground;
       const dd=Math.hypot(x-TC.x,z-TC.z); if (drop){ const kk=Math.max(0,Math.min(1,(48-dd)/4)); h-=0.8*kk; } pos.setZ(i,h);
       const slope=vnoise(x*0.5,z*0.5);
-      if (parts.inLake && h<0.6) tmp.copy(sand); else if (parts.k<=2 && h<PL+TIER[0]+1) tmp.copy(mid).lerp(rock, slope*0.5); else if (h<PL+1.5) tmp.copy(grass).lerp(mid, slope*0.25); else { const kq=Math.max(0,Math.min(1,(h-PL-2)/26)); if (kq<0.6) tmp.copy(rock).lerp(lo,kq/0.6); else tmp.copy(lo).lerp(hi,(kq-0.6)/0.4); }
+      if (parts.inLake && h<0.6) tmp.copy(sand); else if (parts.k===0) tmp.copy(mid).lerp(rock, slope*0.5); else if (h<2.6) tmp.copy(grass).lerp(mid, slope*0.25); else { const kq=Math.max(0,Math.min(1,(h-3)/26)); if (kq<0.6) tmp.copy(rock).lerp(lo,kq/0.6); else tmp.copy(lo).lerp(hi,(kq-0.6)/0.4); }
       col[i*3]=tmp.r; col[i*3+1]=tmp.g; col[i*3+2]=tmp.b; }
     geo.setAttribute('color', new THREE.BufferAttribute(col,3)); geo.rotateX(-Math.PI/2); geo.translate(TC.x,0,TC.z); geo.computeVertexNormals();
     const m=new THREE.Mesh(geo, new THREE.MeshStandardMaterial({vertexColors:true, flatShading:true, roughness:1, metalness:0})); m.receiveShadow=true; m.castShadow=false; scene.add(m); return m;
@@ -605,20 +603,48 @@ function buildTerrain(){
   // trees: on the plain and the lower slopes, never inside the walls or in the lake
   const rs=seeded(23); let placed=0;
   for(let i=0;i<500 && placed<120;i++){ const a=rs()*Math.PI*2, d=10+rs()*70; const x=TC.x+Math.cos(a)*d, z=TC.z+Math.sin(a)*d; const t=terrainParts(x,z); const h=t.ground;
-    if (t.k<=2 || t.inLake || h<0.8 || h>PL+16) continue;
+    if (t.k===0 || t.inLake || h<0.8 || h>18) continue;
     const tr=tree(0,0,1.1+rs()*1.3,true); tr.position.set(x,h-TOP-0.1,z); scene.add(tr); placed++; }
   // the rock keel: a blade of stone from the citadel down between the two front tiles of ring 1
   const keel=mat(0x8f93a3,{roughness:1,flatShading:true});
-  const k1=mesh(new THREE.BoxGeometry(0.7,6.6,4.2), keel, 0, PL+TIER[1]-0.4+3.3, 5.7); scene.add(k1);
-  const k2=mesh(new THREE.BoxGeometry(0.7,3.8,4.2), keel, 0, PL+TIER[1]-0.4+1.9, 9.9); scene.add(k2);
-  const k0=mesh(new THREE.BoxGeometry(0.7,2.2,3.0), keel, 0, PL+TIER[0]+TOP+1.1, 2.2); scene.add(k0);
+  const g1=cellOf['0,1'].elev+PL-0.4, top0=cellOf['0,0'].elev+PL+TOP;
+  scene.add(mesh(new THREE.BoxGeometry(0.7,top0+1.4-g1,4.2), keel, 0, (g1+top0+1.4)/2, 5.7));
+  scene.add(mesh(new THREE.BoxGeometry(0.7,(top0+1.4-g1)*0.55,4.2), keel, 0, g1+(top0+1.4-g1)*0.275, 9.9));
+  scene.add(mesh(new THREE.BoxGeometry(0.7,2.2,3.0), keel, 0, top0+1.1, 2.2));
+}
+function buildLakeside(){
+  const st=cellOf['-1,3'], lk=cellOf['-2,3']; if(!st||!lk) return;
+  const ps=hexPos(st.q,st.r), pl=hexPos(lk.q,lk.r); const yS=st.elev+PL+TOP, yL=lk.elev+PL+TOP;
+  // pier from the station into the lake, with lanterns
+  const wood=mat(0x6b4a2a); const pier=mesh(new THREE.BoxGeometry(1.3,0.18,6), wood, ps.x, 0.78, ps.z+R*0.86+2.6); scene.add(pier);
+  [[ps.x-0.5, ps.z+R*0.86+5.2],[ps.x+0.5, ps.z+R*0.86+5.2]].forEach(([x,z])=>{ scene.add(mesh(new THREE.CylinderGeometry(0.05,0.05,1.1,6), wood, x,1.4,z)); scene.add(mesh(new THREE.SphereGeometry(0.1,8,8), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), x,1.98,z)); });
+  for(let k=0;k<3;k++){ scene.add(mesh(new THREE.CylinderGeometry(0.08,0.08,1.4,6), wood, ps.x-0.55, 0.2, ps.z+R*0.86+1+k*2)); scene.add(mesh(new THREE.CylinderGeometry(0.08,0.08,1.4,6), wood, ps.x+0.55, 0.2, ps.z+R*0.86+1+k*2)); }
+  // the Black Lake tile spills over its front wall into the lake below
+  const wm=new THREE.MeshStandardMaterial({color:0x7fd0ee, emissive:0x3a8fb8, emissiveIntensity:.4, transparent:true, opacity:.6, roughness:.1, side:THREE.DoubleSide});
+  const ez=pl.z+R*0.87; const fall=new THREE.Mesh(new THREE.PlaneGeometry(1.8, yL-0.6), wm); fall.position.set(pl.x, (yL+0.6)/2, ez+0.2); scene.add(fall);
+  const fall2=new THREE.Mesh(new THREE.PlaneGeometry(1.2, yL-0.6), wm.clone()); fall2.material.opacity=.35; fall2.position.set(pl.x, (yL+0.6)/2, ez+0.45); scene.add(fall2);
+  const chan=new THREE.Mesh(new THREE.PlaneGeometry(1.2, R*0.87), wm); chan.rotation.x=-Math.PI/2; chan.position.set(pl.x, yL+0.02, pl.z+R*0.435); scene.add(chan);
+  const foam=[]; for(let k=0;k<5;k++){ const f=new THREE.Mesh(new THREE.SphereGeometry(0.16+0.05*(k%2),8,8), new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.75})); f.position.set(pl.x-0.8+k*0.4, 0.75, ez+0.9); scene.add(f); foam.push(f); }
+  anim.push(t=>{ fall.material.opacity=0.5+0.15*Math.sin(t*6); fall2.material.opacity=0.3+0.15*Math.sin(t*7+1); fall2.position.y=(yL+0.6)/2-0.15*((t*1.5)%1); foam.forEach((f,i)=>{ f.position.y=0.72+0.12*Math.sin(t*4+i); f.position.z=ez+0.9+0.3*Math.sin(t*1.5+i); }); });
+  // the flying train: out of the station, over the lake, round the sky and back to the platform
+  const train=new THREE.Group(); const body=new THREE.Group(); body.rotation.y=-Math.PI/2; train.add(body);
+  body.add(mesh(new THREE.BoxGeometry(0.9,0.5,0.4), mat(0xb8323a), 0,0.35,0)); const boiler=mesh(new THREE.CylinderGeometry(0.17,0.17,0.5,10), mat(0x2b2b2b), 0.25,0.42,0); boiler.rotation.z=Math.PI/2; body.add(boiler);
+  body.add(mesh(new THREE.BoxGeometry(0.3,0.3,0.36), mat(0x2b2b2b), -0.3,0.75,0)); body.add(mesh(new THREE.BoxGeometry(0.7,0.4,0.36), mat(0x6f8a4a), -1.0,0.32,0)); body.add(mesh(new THREE.BoxGeometry(0.7,0.4,0.36), mat(0x3b6fb6), -1.8,0.32,0));
+  body.add(mesh(new THREE.SphereGeometry(0.07,8,8), mat(0xffe28a,{emissive:0xffd25a,emissiveIntensity:2}), 0.52,0.42,0));
+  const wheels=[]; [-0.3,0.2,-0.8,-1.2,-1.6,-2.0].forEach(x=>{ const wh=mesh(new THREE.CylinderGeometry(0.1,0.1,0.44,8), mat(0x111), x,0.1,0); wh.rotation.x=Math.PI/2; body.add(wh); wheels.push(wh); });
+  scene.add(train);
+  const pts=[ [ps.x-1.2, yS+0.25, ps.z-0.4], [ps.x+2.2, yS+0.25, ps.z-0.4], [ps.x+6, yS+1.8, ps.z+4], [ps.x+5, yS+6, ps.z+13], [ps.x-6, yS+11, ps.z+22], [ps.x-19, yS+9, ps.z+20], [ps.x-21, yS+5, ps.z+10], [ps.x-12, yS+3.4, ps.z+6.5] ].map(a=>new THREE.Vector3(a[0],a[1],a[2]));
+  const curve=new THREE.CatmullRomCurve3(pts, true, 'centripetal'); const tan=new THREE.Vector3(), look=new THREE.Vector3();
+  const puffs=[]; for(let k=0;k<8;k++){ const pf=new THREE.Mesh(new THREE.SphereGeometry(0.12,6,6), new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:.5})); scene.add(pf); puffs.push(pf); }
+  anim.push(t=>{ const u=(t/26)%1; const pt=curve.getPointAt(u); curve.getTangentAt(u, tan); train.position.copy(pt); look.copy(pt).add(tan); train.lookAt(look); wheels.forEach(w=>{ w.rotation.y=t*6; });
+    puffs.forEach((pf,i)=>{ const uu=(u-0.004*(i+1)+1)%1; const q=curve.getPointAt(uu); pf.position.set(q.x, q.y+0.9+i*0.12, q.z); pf.material.opacity=0.5-i*0.06; const sc=1+i*0.25; pf.scale.set(sc,sc,sc); }); });
 }
 function buildWalls(){
   const stone=mat(0xa9acb8,{roughness:.95,flatShading:true}); const dirs=[[1,0],[0,1],[-1,1],[-1,0],[0,-1],[1,-1]];
-  ISLANDS.forEach(A=>{ const pa=hexPos(A.q,A.r), kA=ringOf(A), y=A.elev+PL+TOP;
-    dirs.forEach(([dq,dr])=>{ const B=cellOf[(A.q+dq)+','+(A.r+dr)]; if (B && ringOf(B)<=kA) return;
+  ISLANDS.forEach(A=>{ const pa=hexPos(A.q,A.r), y=A.elev+PL+TOP;
+    dirs.forEach(([dq,dr])=>{ const B=cellOf[(A.q+dq)+','+(A.r+dr)]; if (B && B.elev>=A.elev) return;
       const pb=hexPos(A.q+dq,A.r+dr); const mx=(pa.x+pb.x)/2, mz=(pa.z+pb.z)/2, t=0.82; const wx=pa.x+(mx-pa.x)*t, wz=pa.z+(mz-pa.z)*t; const ang=Math.atan2(pb.z-pa.z,pb.x-pa.x);
-      const len=R*0.98; const gate=(dq===0&&dr===1)&&(A.id==='staircase'||A.id==='great-hall'||A.id==='astronomy');
+      const len=R*0.98; const gate=(A.id==='potions'&&dq===0&&dr===1)||(A.id==='great-hall'&&dq===-1&&dr===1)||(A.id==='astronomy'&&dq===0&&dr===1);
       const g=new THREE.Group(); g.position.set(wx,y,wz); g.rotation.y=-ang-Math.PI/2;
       const segs = gate ? [[-len/2,-0.9],[0.9,len/2]] : [[-len/2,len/2]];
       segs.forEach(([a,b])=>{ const L=b-a, c=(a+b)/2; g.add(mesh(new THREE.BoxGeometry(L,1.1,0.36), stone, c,0.55,0)); for(let u=-L/2+0.25;u<L/2;u+=0.5){ g.add(mesh(new THREE.BoxGeometry(0.22,0.3,0.42), stone, c+u,1.25,0)); } });
@@ -628,7 +654,7 @@ function buildWalls(){
 }
 function buildViaducts(){   // short stone walkways between neighbouring tiles of the same terrace
   const stone=mat(0x9a9da8,{roughness:.95,flatShading:true}); const dirs=[[1,0],[0,1],[1,-1]];
-  ISLANDS.forEach(A=>{ dirs.forEach(([dq,dr])=>{ const B=cellOf[(A.q+dq)+','+(A.r+dr)]; if(!B || B.elev!==A.elev) return;
+  ISLANDS.forEach(A=>{ dirs.forEach(([dq,dr])=>{ const B=cellOf[(A.q+dq)+','+(A.r+dr)]; if(!B || B.elev!==A.elev || A.elev<=2) return;   // the two lakeside tiles leave the road open
     const pa=hexPos(A.q,A.r), pb=hexPos(B.q,B.r); const u=new THREE.Vector3(pb.x-pa.x,0,pb.z-pa.z).normalize(); const ap=R*0.866;
     const ea=new THREE.Vector3(pa.x,A.elev+PL+TOP,pa.z).addScaledVector(u,ap-0.5), eb=new THREE.Vector3(pb.x,B.elev+PL+TOP,pb.z).addScaledVector(u,-(ap-0.5));
     const len=ea.distanceTo(eb); const grp=new THREE.Group(); grp.position.copy(ea.clone().add(eb).multiplyScalar(0.5)); grp.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0), eb.clone().sub(ea).normalize());
@@ -726,9 +752,9 @@ function init3D(){
     const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); }
   // little boats drifting in the channels
   const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); const a=rnd()*Math.PI*2, rr=2+rnd()*6; const bx=LAKE.x+Math.cos(a)*rr*1.2, bz=LAKE.z+Math.sin(a)*rr*0.7; b.position.set(bx, 0.6, bz); b.rotation.y=rnd()*Math.PI*2; scene.add(b); anim.push(t=>{ b.position.y=0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
-  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(0, PL+4, 3); }
+  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(0, 6, 8); }
   ISLPOS = ISLANDS.map(i=>{ const p=hexPos(i.q,i.r); return {x:p.x, z:p.z, top:(i.elev||0)+PL+0.55}; });
-  ISLANDS.forEach(buildIsland); buildLinks(); buildViaducts(); buildWalls(); buildTerrain();
+  ISLANDS.forEach(buildIsland); buildLinks(); buildViaducts(); buildWalls(); buildLakeside(); buildTerrain();
   wizard=makeWizard(); scene.add(wizard);
   wiz.idx = Math.floor(dayOfYear()/1) % ISLANDS.length; wiz.t0=performance.now(); updateWizardNote();
   raycaster=new THREE.Raycaster();
