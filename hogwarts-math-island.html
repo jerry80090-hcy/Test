@@ -13,6 +13,16 @@
   --body:"LXGW WenKai TC","Noto Serif TC","PingFang TC","Microsoft JhengHei",serif;
   color-scheme:dark;
 }
+/* day = golden-hour toy city: warm parchment placards over a honey-lit sky, for projectors in bright classrooms */
+:root[data-theme="day"]{
+  --bg:#f0d9b5; --panel:#fbf4e3; --panel-2:#f2e6c9; --ink:#2b2416; --muted:#6b604a; --line:#d6c49c;
+  --accent:#a3362f; --accent-ink:#fff6ea; --gold:#b8892a; --gold-soft:#ecdcb0; --glow:rgba(184,137,42,.3);
+  --sky:#f3d4a6; --fog:#f5dfbd; --water:#4f8fae; --lamp:.25;
+  --shadow:0 10px 28px rgba(80,55,20,.28);
+  color-scheme:light;
+}
+:root[data-theme="day"] #backdrop{background:rgba(60,40,15,.35)}
+:root[data-theme="day"] .btn[aria-pressed="true"],:root[data-theme="day"] .role button[aria-pressed="true"]{color:#fffaf0}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;overflow:hidden}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
@@ -237,6 +247,7 @@ mjx-container{overflow-x:auto;max-width:100%}
     </div>
     <div class="tools">
       <div class="seg role" id="role-switch" role="group" aria-label="身分"><button data-role="teacher" aria-pressed="true" title="教授：完整的課程手冊內容與教學進度">教授</button><button data-role="student" aria-pressed="false" title="小巫師：學習目標、錯誤類型與練習題">小巫師</button></div>
+      <button class="btn" id="btn-theme" title="切換白天／夜晚配色">☀ 白天</button>
       <button class="btn" id="btn-home" title="回到一開始的俯瞰視角">初始視角</button>
       <button class="btn" id="btn-links" aria-pressed="false" title="顯示條目之間的先備／後續連線">魔法連線</button>
       <button class="btn" id="btn-drawer" aria-pressed="false">島嶼清單</button>
@@ -282,6 +293,7 @@ mjx-container{overflow-x:auto;max-width:100%}
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教授／小巫師</b>：右上角切換身分。教授看到完整的條目內容（核心內容、學習目標、不考範圍、錯誤類型、評量、先備連結）與教學進度；小巫師看到的是改寫成學生語言的簡化版「我要學會」與「小心陷阱」，以及「試一試」按鈕：攤開一張牛皮紙卷，上面有簡單、中等、困難三題，答案要自己按開（教授身分則直接顯示答案與解析）。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
+        <li><b>白天／夜晚</b>：右上角切換配色；白天版較亮，適合教室投影，選擇會記在這台裝置。</li>
         <li><b>即時資訊</b>：時鐘、學年週次（以 9 月 1 日起算）、學測倒數（預設 2027-01-22，為估計值，請依大考中心公告修改）、每日輪替的「今日條目」。</li>
       </ul>
       <p><b>資料來源與精確度</b>：條目內容整理自《十二年國教數學領域課程手冊》高中部分。12 年級甲、乙與 A-11A-1、A-11A-2、D-11A-3、S-11B-2、F-11B-2 已依手冊原頁核對；其餘 10、11 年級條目為摘要版，字數約為手冊的 20–50%，判斷命題邊界時請再對照手冊原文。向量以 $\vv{a}$ 標示；線段長以 $\overline{AB}$ 標示。</p>
@@ -376,6 +388,7 @@ let progress = {};  try { progress = JSON.parse(localStorage.getItem('hogmath-pr
 function saveProgress(){ try { localStorage.setItem('hogmath-progress', JSON.stringify(progress)); } catch(e){} }
 let examDate = '2027-01-22'; try { examDate = localStorage.getItem('hogmath-exam') || examDate; } catch(e){}
 let role = 'teacher'; try { role = localStorage.getItem('hogmath-role') === 'student' ? 'student' : 'teacher'; } catch(e){}
+let theme = 'night'; try { theme = localStorage.getItem('hogmath-theme') === 'day' ? 'day' : 'night'; } catch(e){}
 let courseFilter = '';
 let searchTerm = '';
 let showLinks = false;
@@ -409,7 +422,7 @@ const R = 4.2, TOP = 1.3, SPACING = 1.22, PL = 0;   // tile elevations are absol
 const TIER=[10,6,2];                                  // terrace height by ring: citadel, ring 1, ring 2
 const ringOf = i => Math.max(Math.abs(i.q), Math.abs(i.r), Math.abs(i.q+i.r));
 const has3D = !!window.THREE;
-let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, islandGlow={}, linkObjs=[], wizard=null, podium={}, pickables=[];
+let scene, camera, renderer, raycaster, water, sun, hemi, nightSky=[], clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, islandGlow={}, linkObjs=[], wizard=null, podium={}, pickables=[];
 const camState = { theta:0.12, phi:1.22, radius:68, target: has3D ? new THREE.Vector3(0,0,0) : null };
 const HOME_VIEW = { theta:0.12, phi:1.22, radius:68, target:[0,6,3] };   // the opening shot
 let fly=null, lastInteract=performance.now();
@@ -757,8 +770,12 @@ function wizardTick(now, dt){
 function updateWizardNote(){ const is=ISLANDS[wiz.idx]; $('#wiz-where').textContent = wiz.mode==='walk' ? `飛往 ${ISLANDS[(wiz.idx+1)%ISLANDS.length].name}` : `${is.name} 講台演講`; }
 
 function applySceneTheme(){
-  if(!has3D) return;
+  if(!has3D || !scene) return;
   scene.background=new THREE.Color(cssVar('--sky')||'#070b18'); scene.fog.color=new THREE.Color(cssVar('--fog')||'#111a36'); water.material.color=new THREE.Color(cssVar('--water')||'#0c2436');
+  const day = theme==='day';   // sun and sky light by day, moonlight by night
+  hemi.color.setHex(day?0xcfe0ff:0x3c4f9a); hemi.groundColor.setHex(day?0x7a6440:0x0d1222); hemi.intensity = day?0.85:0.55;
+  sun.color.setHex(day?0xffe2b8:0xc3d2ff); sun.intensity = day?1.15:0.75;
+  nightSky.forEach(o=>{ o.visible=!day; });
   refreshWindows();
 }
 function refreshWindows(){
@@ -806,9 +823,9 @@ function init3D(){
   water=new THREE.Mesh(new THREE.PlaneGeometry(600,600), new THREE.MeshStandardMaterial({color:0x0c2436, roughness:.25, metalness:.3})); water.rotation.x=-Math.PI/2; water.position.y=0.6; water.receiveShadow=true; scene.add(water);   // the lake on the plain (and the far sea)
   // stars and moon
   { const n=900, pos=new Float32Array(n*3), rs=seeded(11); for(let i=0;i<n;i++){ const th=rs()*Math.PI*2, ph=Math.acos(rs()*0.85); const rr=180; pos[i*3]=Math.cos(th)*Math.sin(ph)*rr; pos[i*3+1]=Math.cos(ph)*rr+5; pos[i*3+2]=Math.sin(th)*Math.sin(ph)*rr; }
-    const sg=new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos,3)); const stars=new THREE.Points(sg, new THREE.PointsMaterial({color:0xdfe6ff, size:0.9, sizeAttenuation:true, fog:false})); scene.add(stars); anim.push(t=>{ stars.rotation.y=t*0.004; });
+    const sg=new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(pos,3)); const stars=new THREE.Points(sg, new THREE.PointsMaterial({color:0xdfe6ff, size:0.9, sizeAttenuation:true, fog:false})); scene.add(stars); nightSky.push(stars); anim.push(t=>{ stars.rotation.y=t*0.004; });
     const moon=new THREE.Mesh(new THREE.SphereGeometry(5,20,20), new THREE.MeshBasicMaterial({color:0xe9eeff, fog:false})); moon.position.set(-110,95,-120); scene.add(moon);
-    const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); }
+    const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); nightSky.push(moon, halo); }
   // little boats drifting in the channels
   const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); const a=rnd()*Math.PI*2, rr=2+rnd()*6; const bx=LAKE.x+Math.cos(a)*rr*1.2, bz=LAKE.z+Math.sin(a)*rr*0.7; b.position.set(bx, 0.6, bz); b.rotation.y=rnd()*Math.PI*2; scene.add(b); anim.push(t=>{ b.position.y=0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
   { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(...HOME_VIEW.target); }
@@ -991,8 +1008,14 @@ function renderIslandList(){
 }
 $('#legend').innerHTML = Object.entries(COURSE).map(([k,c])=>`<span class="chip" style="--c:${c.css}"><i class="dot"></i>${esc(c.name)}</span>`).join('');
 
+function applyTheme(){
+  document.documentElement.dataset.theme = theme;
+  const b=$('#btn-theme'); b.textContent = theme==='day' ? '☾ 夜晚' : '☀ 白天'; b.setAttribute('aria-label', theme==='day' ? '切換到夜晚配色' : '切換到白天配色');
+  applySceneTheme();
+}
+$('#btn-theme').addEventListener('click', ()=>{ theme = theme==='day' ? 'night' : 'day'; try{ localStorage.setItem('hogmath-theme', theme); }catch(e){} applyTheme(); toast(theme==='day' ? '白天：黃昏光線，適合教室投影' : '夜晚：燭光與星空'); });
 function applyRole(){ document.querySelectorAll('#role-switch [data-role]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.role===role)); document.documentElement.dataset.role=role; }
-applyRole();
+applyRole(); applyTheme();
 /* ---------------- live info ---------------- */
 function dayOfYear(d){ d=d||new Date(); return Math.floor((d - new Date(d.getFullYear(),0,1))/864e5); }
 function refreshProgress(){
