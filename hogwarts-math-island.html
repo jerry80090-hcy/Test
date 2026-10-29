@@ -119,7 +119,6 @@ button{cursor:pointer}
   background:linear-gradient(180deg,#f1dfb4,#d9bb83);box-shadow:inset 0 0 8px rgba(110,70,20,.35),0 2px 8px rgba(0,0,0,.35)}
 .try-btn:hover{filter:brightness(1.06)}
 .try-btn svg{width:20px;height:20px;flex:none}
-.try-row small{color:var(--muted);font-size:12px}
 /* parchment scroll: two wooden rods around a sheet of aged paper */
 #scroll{position:absolute;z-index:7;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 32px));max-height:calc(100vh - 32px);display:flex;flex-direction:column;
   filter:drop-shadow(0 18px 30px rgba(0,0,0,.6))}
@@ -193,7 +192,9 @@ mjx-container{overflow-x:auto;max-width:100%}
   .crest h1 span{display:none}
   .chips{order:3;flex:1 0 100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
   .chips::-webkit-scrollbar{display:none}
-  .tools{margin-left:0}
+  .tools{margin-left:0;flex:1 0 100%;overflow-x:auto;padding-bottom:2px}
+  .tools::-webkit-scrollbar{display:none}
+  .tools>*{flex:none;white-space:nowrap}
   #card{left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));top:auto;bottom:0;width:auto;max-height:56vh;border-radius:14px 14px 0 0;
     padding-bottom:env(safe-area-inset-bottom,0px)}
   #drawer{top:auto;bottom:0;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));width:auto;max-height:50vh;border-radius:14px 14px 0 0}
@@ -236,6 +237,7 @@ mjx-container{overflow-x:auto;max-width:100%}
     </div>
     <div class="tools">
       <div class="seg role" id="role-switch" role="group" aria-label="身分"><button data-role="teacher" aria-pressed="true" title="教授：完整的課程手冊內容與教學進度">教授</button><button data-role="student" aria-pressed="false" title="小巫師：學習目標、錯誤類型與練習題">小巫師</button></div>
+      <button class="btn" id="btn-home" title="回到一開始的俯瞰視角">初始視角</button>
       <button class="btn" id="btn-links" aria-pressed="false" title="顯示條目之間的先備／後續連線">魔法連線</button>
       <button class="btn" id="btn-drawer" aria-pressed="false">島嶼清單</button>
       <button class="btn" id="btn-live" aria-pressed="true">時鐘</button>
@@ -275,7 +277,7 @@ mjx-container{overflow-x:auto;max-width:100%}
       <h2 id="help-title">HOW TO EXPLORE · 說明</h2>
       <p>這座微縮模型把 108 課綱高中數學的 84 個學習內容條目，依主題分配到 15 座六角形小島上，每棟小建築就是一個條目。版面與互動致敬台北市長參選人沈伯洋的「HEART 政策島」：主題島、關鍵字搜尋、條目間的協作連線，以及一位巡島的小人偶，這裡換成在各島講台上演講的小巫師。配色取夜晚的天文塔：深藍夜空、燭光金與火紅重點。</p>
       <ul>
-        <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
+        <li><b>拖曳</b>旋轉視角、<b>滾輪／雙指</b>縮放，按「初始視角」回到一開始的俯瞰角度；點島名或建築物看內容，<kbd>Esc</kbd> 關閉卡片。</li>
         <li><b>地圖方位</b>參考經典魔法學院的配置：城堡立在湖邊懸崖上，黑湖在南、球場在西、禁忌森林（與守林人小屋）在東、溫室貼著城堡、車站在湖的對岸；占卜塔在北塔。城堡採哥德式風格（蘇格蘭高地的中世紀城堡，參考德倫與格洛斯特大教堂）：高瘦尖塔、尖拱窗、飛扶壁，十座城堡島由南往北逐級抬升成懸崖平台，彼此以石拱高架橋相連，外圍是月光下的群山。整座學院是三層同心的山形層城：天文塔在最高的核心台地，第二層六格、第三層八格環繞四周，北側的空位是裸岩台地，每層邊緣有城牆與垛口，東南方的路穿過三道城門上到核心，一道石脊從核心劈到第二層。四周是平原，沒有背景山脈，所以可以環視；南面是黑湖，黑湖台地的水從城牆瀉入湖中，湖畔車站有碼頭伸進湖裡，列車會從月台起飛繞湖一圈再回站。</li>
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教授／小巫師</b>：右上角切換身分。教授看到完整的條目內容（核心內容、學習目標、不考範圍、錯誤類型、評量、先備連結）與教學進度；小巫師看到的是改寫成學生語言的簡化版「我要學會」與「小心陷阱」，以及「試一試」按鈕：攤開一張牛皮紙卷，上面有簡單、中等、困難三題，答案要自己按開（教授身分則直接顯示答案與解析）。</li>
@@ -409,6 +411,7 @@ const ringOf = i => Math.max(Math.abs(i.q), Math.abs(i.r), Math.abs(i.q+i.r));
 const has3D = !!window.THREE;
 let scene, camera, renderer, raycaster, water, sun, hemi, clockHands=[], anim=[], labels=[], buildings={}, islandObj={}, islandGlow={}, linkObjs=[], wizard=null, podium={}, pickables=[];
 const camState = { theta:0.12, phi:1.22, radius:68, target: has3D ? new THREE.Vector3(0,0,0) : null };
+const HOME_VIEW = { theta:0.12, phi:1.22, radius:68, target:[0,6,3] };   // the opening shot
 let fly=null, lastInteract=performance.now();
 
 function hexPos(q,r){ return { x: SPACING*R*Math.sqrt(3)*(q + r/2), z: SPACING*R*1.5*r }; }
@@ -808,7 +811,7 @@ function init3D(){
     const halo=new THREE.Mesh(new THREE.SphereGeometry(7.5,20,20), new THREE.MeshBasicMaterial({color:0xaab8ff, transparent:true, opacity:.18, fog:false})); halo.position.copy(moon.position); scene.add(halo); }
   // little boats drifting in the channels
   const rnd=seeded(42); for(let i=0;i<6;i++){ const b=new THREE.Group(); b.add(mesh(new THREE.BoxGeometry(0.9,0.25,0.4), mat(0xf2e4c8), 0,0.1,0)); b.add(mesh(new THREE.CylinderGeometry(0.02,0.02,0.9,5), mat(0x6b3f1e), 0,0.6,0)); const sail=mesh(new THREE.PlaneGeometry(0.45,0.6), mat(0xd8cfb8,{side:THREE.DoubleSide}), 0.24,0.65,0); sail.rotation.y=Math.PI/2; b.add(sail); b.add(mesh(new THREE.SphereGeometry(0.06,6,6), mat(0xffd27a,{emissive:0xffc966,emissiveIntensity:2}), 0,1.05,0)); const a=rnd()*Math.PI*2, rr=2+rnd()*6; const bx=LAKE.x+Math.cos(a)*rr*1.2, bz=LAKE.z+Math.sin(a)*rr*0.7; b.position.set(bx, 0.6, bz); b.rotation.y=rnd()*Math.PI*2; scene.add(b); anim.push(t=>{ b.position.y=0.6+Math.sin(t*1.3+i)*0.06; b.rotation.z=Math.sin(t*1.1+i)*0.05; }); }
-  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(0, 6, 3); }
+  { let cx=0,cz=0; ISLANDS.forEach(i=>{ const p=hexPos(i.q,i.r); cx+=p.x; cz+=p.z; }); TC.x=cx/ISLANDS.length; TC.z=cz/ISLANDS.length; camState.target.set(...HOME_VIEW.target); }
   ISLPOS = ISLANDS.map(i=>{ const p=hexPos(i.q,i.r); return {x:p.x, z:p.z, top:(i.elev||0)+PL+0.55}; });
   ISLANDS.forEach(buildIsland); buildLinks(); buildViaducts(); buildWalls(); buildLakeside(); buildTerrain();
   wizard=makeWizard(); scene.add(wizard);
@@ -827,8 +830,10 @@ function updateCamera(){
   camera.position.set(t.x + s.radius*Math.sin(s.phi)*Math.sin(s.theta), t.y + s.radius*Math.cos(s.phi), t.z + s.radius*Math.sin(s.phi)*Math.cos(s.theta));
   camera.lookAt(t);
 }
-function flyTo(target, radius, phi){
-  const s=camState; fly={ t0:performance.now(), dur:reduceMotion?1:950, from:{theta:s.theta, phi:s.phi, radius:s.radius, target:s.target.clone()}, to:{theta:s.theta, phi:phi||0.95, radius, target:target.clone()} };
+function flyTo(target, radius, phi, theta){
+  const s=camState;
+  if (theta!==undefined){ const TAU=Math.PI*2; s.theta=((s.theta-theta)%TAU+TAU+Math.PI)%TAU-Math.PI+theta; }   // unwrap so the camera turns the short way
+  fly={ t0:performance.now(), dur:reduceMotion?1:950, from:{theta:s.theta, phi:s.phi, radius:s.radius, target:s.target.clone()}, to:{theta:theta===undefined?s.theta:theta, phi:phi||0.95, radius, target:target.clone()} };
   lastInteract=performance.now();
 }
 let lastT=performance.now(), tipTimer=0;
@@ -893,7 +898,7 @@ function selectEntry(code, fly){
   const related = LINKS.filter(L=>L[0]===code||L[1]===code).map(L=>{ const other=L[0]===code?L[1]:L[0]; return `<button data-go="${other}" title="${esc(L[2])}">${esc(other)} ${esc(byCode[other].title)}</button>`; }).join('');
   const sec=(title, arr, ordered)=> arr&&arr.length ? `<h4>${title}</h4><${ordered?'ol':'ul'}>${arr.map(x=>`<li>${rich(x)}</li>`).join('')}</${ordered?'ol':'ul'}>` : '';
   const s=progress[code]||0; const student = role==='student';
-  const tries = TRIALS[code] ? `<h4>PRACTICE · 試一試</h4><div class="try-row"><button class="try-btn" type="button" data-try="${code}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h11a3 3 0 0 1 0 6h-1v8a3 3 0 0 1-3 3H5a3 3 0 0 1 0-6h1z" fill="#f6e7c4" stroke="#6b4a1c" stroke-width="1.4"/><path d="M9 9h5M9 12h5M9 15h3" stroke="#8a3a22" stroke-width="1.3" stroke-linecap="round"/></svg>試一試</button><small>攤開牛皮紙卷：簡單、中等、困難各一題</small></div>` : '';
+  const tries = TRIALS[code] ? `<h4>PRACTICE · 試一試</h4><div class="try-row"><button class="try-btn" type="button" data-try="${code}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h11a3 3 0 0 1 0 6h-1v8a3 3 0 0 1-3 3H5a3 3 0 0 1 0-6h1z" fill="#f6e7c4" stroke="#6b4a1c" stroke-width="1.4"/><path d="M9 9h5M9 12h5M9 15h3" stroke="#8a3a22" stroke-width="1.3" stroke-linecap="round"/></svg>試一試</button></div>` : '';
   const head = `
     <div class="eyebrow"><span class="cc" style="--c:${COURSE[e.course].css}"></span>${esc(COURSE[e.course].name)} · <button class="linkish" data-island="${isl.id}">${esc(isl.name)}</button>${student ? ' · 小巫師版' : ''}</div>
     <h3>${esc(e.code)}　${esc(e.title)}</h3>`;
@@ -959,6 +964,8 @@ document.addEventListener('click', e=>{
 });
 $('#card-close').addEventListener('click', closeCard);
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(!$('#scroll').hidden) closeScroll(); else if(!$('#help').hidden) toggleHelp(false); else if(!$('#results').hidden) hideResults(); else if(!$('#card').hidden) closeCard(); } });
+$('#btn-home').addEventListener('click', ()=>{ if(!has3D) return; flyTo(new THREE.Vector3(...HOME_VIEW.target), HOME_VIEW.radius, HOME_VIEW.phi, HOME_VIEW.theta); });
+$('#btn-home').hidden = !has3D;
 $('#btn-links').addEventListener('click', e=>{ showLinks=!showLinks; linesMuted=!showLinks; e.currentTarget.setAttribute('aria-pressed', showLinks); refreshLinks(); toast(showLinks ? `顯示 ${LINKS.length} 條魔法連線（先備 → 後續）` : '已隱藏魔法連線；點選條目時會再顯示該條目的連線'); });
 $('#btn-drawer').addEventListener('click', e=>{ const d=$('#drawer'); d.hidden=!d.hidden; e.currentTarget.setAttribute('aria-pressed', !d.hidden); if(!d.hidden){ renderIslandList(); if(innerWidth<=760){ $('#card').hidden=true; $('#live').hidden=true; $('#btn-live').setAttribute('aria-pressed','false'); } } });
 $('#btn-live').addEventListener('click', e=>{ const l=$('#live'); l.hidden=!l.hidden; e.currentTarget.setAttribute('aria-pressed', !l.hidden); if(!l.hidden && innerWidth<=760){ $('#card').hidden=true; $('#drawer').hidden=true; } });
