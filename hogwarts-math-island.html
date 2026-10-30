@@ -210,6 +210,16 @@ mjx-container{overflow-x:auto;max-width:100%}
 .lab-svg .mean{stroke:var(--accent);stroke-width:2;stroke-dasharray:4 4}
 .lab-svg .proj{stroke:var(--gold);stroke-width:1.5;stroke-dasharray:4 4}
 .lab-svg .arc{fill:none;stroke:var(--gold);stroke-width:2}
+.lab-ico{width:1em;height:1em;vertical-align:-.12em;flex:none}
+.lab-mark{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin-left:6px;border-radius:50%;flex:none;vertical-align:middle;
+  color:#9a6fd6;background:rgba(154,111,214,.16);border:1px solid rgba(180,145,230,.6);font-size:14px}
+:root[data-theme="day"] .lab-mark{color:#6b3fa8;background:rgba(107,63,168,.1);border-color:rgba(107,63,168,.45)}
+.lbl .lab-mark{width:18px;height:18px;font-size:12px;margin-left:5px;vertical-align:1px}
+.lbl.active .lab-mark{color:var(--accent-ink);border-color:var(--accent-ink)}
+#card h3 .lab-mark{width:26px;height:26px;font-size:16px}
+.lab-btn{display:inline-flex;align-items:center;gap:6px}
+.lab-btn .lab-ico{color:#9a6fd6;font-size:16px}
+:root[data-theme="day"] .lab-btn .lab-ico{color:#6b3fa8}
 .lab-ctls{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 18px;margin:12px 0 6px}
 .lab-ctl{display:flex;flex-direction:column;gap:4px;font-size:14px;min-width:0}
 .lab-ctl b{font-variant-numeric:tabular-nums}
@@ -325,7 +335,7 @@ mjx-container{overflow-x:auto;max-width:100%}
         <li><b>魔法連線</b>：依課程手冊「先備／連結／後續」畫出的 27 條跨島連線；選取條目時只顯示與它相關的線。</li>
         <li><b>教授／小巫師</b>：右上角切換身分。教授看到完整的條目內容（核心內容、學習目標、不考範圍、錯誤類型、評量、先備連結）與教學進度；小巫師看到的是改寫成學生語言的簡化版「我要學會」與「小心陷阱」，以及「試一試」按鈕：攤開一張牛皮紙卷，上面有簡單、中等、困難三題，答案要自己按開（教授身分則直接顯示答案與解析）。</li>
         <li><b>教學進度</b>：在條目卡片把狀態標成「進行中」或「已完成」，窗戶會亮起來；進度存在這台裝置的瀏覽器裡。</li>
-        <li><b>魔法實驗</b>：部分條目（三角函數圖形、廣義三角比、微分、黎曼和、二項分布）有可以拖動滑桿的互動圖，卡片裡按「動手玩」打開。</li>
+        <li><b>魔法實驗</b>：標有紫色巫師帽的條目（島名、條目清單、搜尋結果都看得到），（三角函數圖形、廣義三角比、微分、黎曼和、二項分布）有可以拖動滑桿的互動圖，卡片裡按「動手玩」打開。</li>
         <li><b>白天／夜晚</b>：右上角切換配色；白天版較亮，適合教室投影，選擇會記在這台裝置。</li>
         <li><b>即時資訊</b>：時鐘、學年週次（以 9 月 1 日起算）、學測倒數（預設 2027-01-22，為估計值，請依大考中心公告修改）、每日輪替的「今日條目」。</li>
       </ul>
@@ -872,7 +882,7 @@ function init3D(){
   wiz.idx = Math.floor(dayOfYear()/1) % ISLANDS.length; wiz.t0=performance.now(); updateWizardNote();
   raycaster=new THREE.Raycaster();
   // labels
-  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}<small>${esc(isl.theme)} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0)+PL, p.z)}); });
+  const lw=$('#labels'); ISLANDS.forEach(isl=>{ const el=document.createElement('button'); el.className='lbl'; el.type='button'; el.innerHTML=`${esc(isl.name)}${isl.entries.some(c=>LAB_OF[c])?`<span class="lab-mark" title="島上有魔法實驗">${LAB_ICON}</span>`:''}<small>${esc(isl.theme)} · <span class="cnt"></span></small>`; el.addEventListener('click',()=>selectIsland(isl.id,true)); lw.appendChild(el); const p=hexPos(isl.q,isl.r); labels.push({isl, el, pos:new THREE.Vector3(p.x, TOP+(isl.lh||6.4)+(isl.elev||0)+PL, p.z)}); });
   resize(); applySceneTheme(); refreshLabels();
   addEventListener('resize', resize);
   setupPointer(canvas);
@@ -942,7 +952,7 @@ function selectIsland(id, fly){
     <p class="sub">${esc(isl.blurb)}</p>
     <p class="sub">${isl.entries.length} 個條目 · 已完成 ${done}／${isl.entries.length}</p>
     <h4>BUILDINGS · 條目</h4>
-    <ul class="bld">${isl.entries.map(c=>{ const e=byCode[c]; return `<li><button data-go="${c}"><span class="cc" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${COURSE[e.course].css};flex:none"></span><span class="code">${esc(c)}</span><span>${esc(e.title)}</span><i class="st" data-s="${progress[c]||0}"></i></button></li>`; }).join('')}</ul>`;
+    <ul class="bld">${isl.entries.map(c=>{ const e=byCode[c]; return `<li><button data-go="${c}"><span class="cc" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${COURSE[e.course].css};flex:none"></span><span class="code">${esc(c)}</span><span>${esc(e.title)}</span>${labMark(c)}<i class="st" data-s="${progress[c]||0}"></i></button></li>`; }).join('')}</ul>`;
   showCard(h); refreshLinks(); setHash(id);
 }
 function selectEntry(code, fly){
@@ -955,13 +965,13 @@ function selectEntry(code, fly){
   const tries = TRIALS[code] ? `<h4>PRACTICE · 試一試</h4><div class="try-row"><button class="try-btn" type="button" data-try="${code}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h11a3 3 0 0 1 0 6h-1v8a3 3 0 0 1-3 3H5a3 3 0 0 1 0-6h1z" fill="#f6e7c4" stroke="#6b4a1c" stroke-width="1.4"/><path d="M9 9h5M9 12h5M9 15h3" stroke="#8a3a22" stroke-width="1.3" stroke-linecap="round"/></svg>試一試</button></div>` : '';
   const head = `
     <div class="eyebrow"><span class="cc" style="--c:${COURSE[e.course].css}"></span>${esc(COURSE[e.course].name)} · <button class="linkish" data-island="${isl.id}">${esc(isl.name)}</button>${student ? ' · 小巫師版' : ''}</div>
-    <h3>${esc(e.code)}　${esc(e.title)}</h3>`;
+    <h3>${esc(e.code)}　${esc(e.title)}${labMark(e.code)}</h3>`;
   const h = student ? head + `
     <div class="core">${rich(e.core)}</div>
     ${sec('GOALS · 我要學會', e.sg && e.sg.length ? e.sg : e.goals, false)}
     ${sec('WATCH OUT · 小心陷阱', e.se && e.se.length ? e.se : e.errors, false)}
     ${tries}
-    ${LAB_OF[code] ? `<h4>LAB · 魔法實驗</h4><button class="btn lab-btn" type="button" data-lab="${LAB_OF[code]}" data-code="${code}">動手玩：${esc(LABS[LAB_OF[code]].title)}</button>` : ''}
+    ${LAB_OF[code] ? `<h4>LAB · 魔法實驗</h4><button class="btn lab-btn" type="button" data-lab="${LAB_OF[code]}" data-code="${code}">${LAB_ICON}動手玩：${esc(LABS[LAB_OF[code]].title)}</button>` : ''}
     ${related ? `<h4>MAGIC LINES · 魔法連線</h4><div class="linkrow">${related}</div>` : ''}
     <p class="note">小巫師版的學習目標與陷阱是依課程手冊改寫的簡化版；完整內容請切換到「教授」。</p>` : head + `
     <div class="seg" role="group" aria-label="教學進度">
@@ -975,7 +985,7 @@ function selectEntry(code, fly){
     ${sec('COMMON ERRORS · 錯誤類型', e.errors, true)}
     ${sec('ASSESSMENT · 評量', e.assess, true)}
     ${tries}
-    ${LAB_OF[code] ? `<h4>LAB · 魔法實驗</h4><button class="btn lab-btn" type="button" data-lab="${LAB_OF[code]}" data-code="${code}">動手玩：${esc(LABS[LAB_OF[code]].title)}</button>` : ''}
+    ${LAB_OF[code] ? `<h4>LAB · 魔法實驗</h4><button class="btn lab-btn" type="button" data-lab="${LAB_OF[code]}" data-code="${code}">${LAB_ICON}動手玩：${esc(LABS[LAB_OF[code]].title)}</button>` : ''}
     ${e.extra ? `<h4>NOTES · 補充</h4><p>${rich(e.extra)}</p>` : ''}
     ${sec('MAP · 先備／連結／後續', e.links, false)}
     ${related ? `<h4>MAGIC LINES · 魔法連線</h4><div class="linkrow">${related}</div>` : ''}
@@ -989,6 +999,9 @@ function showCard(html){
   typeset(inner);
 }
 /* ---------------- labs: hands-on SVG experiments ---------------- */
+// little wizard hat: marks entries that have a hands-on lab
+const LAB_ICON = '<svg class="lab-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.3 12 8 2.4c.35-.9 1.4-1 1.9-.2l.5.9c.9-.3 1.9.2 2.3 1.1-.9-.4-1.7-.2-2.2.3L12 12z" fill="currentColor"/><ellipse cx="8.1" cy="12.4" rx="6.6" ry="1.7" fill="currentColor"/><path d="m8.2 6.3.45.95 1.05.1-.8.7.25 1-.95-.55-.9.55.25-1-.8-.7 1.05-.1z" fill="var(--panel)"/></svg>';
+const labMark = code => LAB_OF[code] ? `<span class="lab-mark" title="有魔法實驗，可以動手玩">${LAB_ICON}</span>` : '';
 const LAB_OF = { 'F-11A-1':'wave', 'F-11B-1':'wave', 'F-12甲-5':'riemann', 'F-12甲-3':'secant', 'F-12乙-3':'secant', 'D-12甲-2':'binom', 'D-12乙-2':'binom', 'G-10-6':'unit' };
 const gcd = (a,b)=>{ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; };
 const MINUS='−';
@@ -1141,7 +1154,7 @@ function hideResults(){ resultsEl.hidden=true; searchEl.setAttribute('aria-expan
 function renderResults(){
   const q=searchTerm; if(!q){ hideResults(); return; }
   const hits=ENTRIES.filter(e=>entryMatches(e)).slice(0,14);
-  resultsEl.innerHTML = hits.length ? hits.map(e=>`<li role="option" data-code="${e.code}"><span class="code">${esc(e.code)}</span><span>${esc(e.title)}</span><span class="isl">${esc(islandOf[e.code].name)}</span></li>`).join('') : '<li class="empty">找不到符合的條目</li>';
+  resultsEl.innerHTML = hits.length ? hits.map(e=>`<li role="option" data-code="${e.code}"><span class="code">${esc(e.code)}</span><span>${esc(e.title)}</span>${labMark(e.code)}<span class="isl">${esc(islandOf[e.code].name)}</span></li>`).join('') : '<li class="empty">找不到符合的條目</li>';
   resultsEl.hidden=false; searchEl.setAttribute('aria-expanded','true'); selIdx=-1;
 }
 searchEl.addEventListener('input', ()=>{ searchTerm=searchEl.value.trim().toLowerCase(); refreshDim(); renderResults(); });
