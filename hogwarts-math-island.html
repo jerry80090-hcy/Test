@@ -1069,7 +1069,7 @@ function selectIsland(id, fly){
 function selectEntry(code, fly){
   const e=byCode[code]; if(!e) return; const isl=islandOf[code]; selected={type:'entry', code}; linesMuted=false;
   const look = showSigil(code);
-  if (has3D && fly && look) flyTo(look, 15, 1.05);
+  if (has3D && fly && look) flyTo(look, 24, 1.0);
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===isl.id));
   const related = LINKS.filter(L=>L[0]===code||L[1]===code).map(L=>{ const other=L[0]===code?L[1]:L[0]; return `<button data-go="${other}" title="${esc(L[2])}">${esc(other)} ${esc(byCode[other].title)}</button>`; }).join('');
   const sec=(title, arr, ordered)=> arr&&arr.length ? `<h4>${title}</h4><${ordered?'ol':'ul'}>${arr.map(x=>`<li>${rich(x)}</li>`).join('')}</${ordered?'ol':'ul'}>` : '';
