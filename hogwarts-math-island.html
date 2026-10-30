@@ -899,8 +899,16 @@ function init3D(){
   requestAnimationFrame(loop);
 }
 function resize(){ const w=innerWidth, h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+const viewOff={x:0,y:0};
+function updateViewOffset(){
+  const card=$('#card'), w=innerWidth, h=innerHeight; let tx=0, ty=0;
+  if(!card.hidden){ if(w>760) tx=(card.offsetWidth+16)/2; else ty=Math.min(card.offsetHeight, h*0.56)/2; }
+  viewOff.x+=(tx-viewOff.x)*0.12; viewOff.y+=(ty-viewOff.y)*0.12;
+  if(Math.abs(viewOff.x)<0.5 && Math.abs(viewOff.y)<0.5 && !tx && !ty){ if(camera.view && camera.view.enabled) camera.clearViewOffset(); return; }
+  camera.setViewOffset(w, h, viewOff.x, viewOff.y, w, h);
+}
 function updateCamera(){
-  const s=camState, t=s.target;
+  const s=camState, t=s.target; updateViewOffset();
   camera.position.set(t.x + s.radius*Math.sin(s.phi)*Math.sin(s.theta), t.y + s.radius*Math.cos(s.phi), t.z + s.radius*Math.sin(s.phi)*Math.cos(s.theta));
   camera.lookAt(t);
 }
@@ -951,8 +959,101 @@ function hover(e){ const now=performance.now(); if(now-tipTimer<70) return; tipT
 function pick(e){ const d=castAt(e); if(!d) return; if(d.code) selectEntry(d.code, true); else if(d.island) selectIsland(d.island, true); }
 
 /* ---------------- selection & cards ---------------- */
+/* ---------------- sigils: a glowing symbol above the selected building ---------------- */
+// text glyphs are drawn as type; '@name' entries are little hand-drawn icons
+const SIGIL = {
+ 'N-10-1':'√2','N-10-2':'|x|','N-10-3':'aˣ','N-10-4':'log','N-10-5':'≈','N-10-6':'aₙ','N-10-7':'⇒',
+ 'G-10-1':'@mirror','G-10-2':'@line','G-10-3':'@circle','G-10-4':'@tancircle','G-10-5':'@polar','G-10-6':'@unit','G-10-7':'@triangle',
+ 'A-10-1':'(a+b)³','A-10-2':'÷','F-10-1':'@parabola','F-10-2':'@cubic','F-10-3':'f>0',
+ 'D-10-1':'@venn','D-10-2':'@scatter','D-10-3':'n!','D-10-4':'@dice',
+ 'N-11A-1':'rad','S-11A-1':'@cube','G-11A-1':'@vector','G-11A-2':'@axes3','G-11A-3':'@axes3','G-11A-4':'≤','G-11A-5':'α+β',
+ 'G-11A-6':'a·b','G-11A-7':'a×b','G-11A-8':'det','G-11A-9':'@plane','G-11A-10':'@axes3',
+ 'A-11A-1':'@matrix','A-11A-2':'x y z','A-11A-3':'@matrix','A-11A-4':'log',
+ 'F-11A-1':'@wave','F-11A-2':'@wave','F-11A-3':'↻','F-11A-4':'@expo','D-11A-1':'%','D-11A-2':'P(B|A)','D-11A-3':'@tree',
+ 'N-11B-1':'rad','S-11B-1':'@cube','S-11B-2':'@cone','G-11B-1':'@vector','G-11B-2':'a·b','G-11B-3':'@triangle','G-11B-4':'@axes3',
+ 'A-11B-1':'@matrix','F-11B-1':'@wave','F-11B-2':'@expo','D-11B-1':'%','D-11B-2':'P(B|A)',
+ 'N-12甲-1':'lim','N-12甲-2':'∑','N-12甲-3':'i','G-12甲-1':'@ellipse','A-12甲-1':'a±bi',
+ 'F-12甲-1':'f⁻¹','F-12甲-2':'lim','F-12甲-3':'@tangent','F-12甲-4':'f′','F-12甲-5':'@riemann','F-12甲-6':'@integral','F-12甲-7':'@integral',
+ 'D-12甲-1':'E(X)','D-12甲-2':'@bars',
+ 'N-12乙-1':'i','N-12乙-2':'∑','A-12乙-1':'@lp','A-12乙-2':'a±bi',
+ 'F-12乙-1':'f(x)','F-12乙-2':'lim','F-12乙-3':'@tangent','F-12乙-4':'f″','F-12乙-5':'@integral','F-12乙-6':'@integral',
+ 'D-12乙-1':'E(X)','D-12乙-2':'@bars'
+};
+const SIGIL_ICON = { // draw in a 256×256 box centred at (128,128), stroke already set
+ mirror(c){ sgLine(c,40,216,216,40,true); sgDot(c,92,70); sgDot(c,186,164); sgLine(c,92,70,186,164,true); },
+ line(c){ sgAxes(c); sgLine(c,40,200,216,56); },
+ circle(c){ c.beginPath(); c.arc(128,128,82,0,7); c.stroke(); sgDot(c,128,128); },
+ tancircle(c){ c.beginPath(); c.arc(118,140,66,0,7); c.stroke(); sgLine(c,40,52,236,104); sgDot(c,136,76); },
+ polar(c){ sgAxes(c); sgLine(c,128,128,206,56); c.beginPath(); c.arc(128,128,40,0,-0.75,true); c.stroke(); sgDot(c,206,56); },
+ unit(c){ sgAxes(c); c.beginPath(); c.arc(128,128,80,0,7); c.stroke(); sgLine(c,128,128,70,72); sgDot(c,70,72); },
+ triangle(c){ c.beginPath(); c.moveTo(40,206); c.lineTo(216,206); c.lineTo(150,54); c.closePath(); c.stroke(); },
+ parabola(c){ sgAxes(c); sgPlot(c,x=>0.9*x*x-1.6,-1.6,1.6); },
+ cubic(c){ sgAxes(c); sgPlot(c,x=>x*x*x-1.6*x,-1.55,1.55); },
+ integral(c){ c.save(); c.lineWidth=15; c.beginPath(); c.moveTo(178,58); c.bezierCurveTo(166,26,126,30,126,78); c.lineTo(126,178); c.bezierCurveTo(126,226,86,230,74,198); c.stroke(); c.restore(); sgDot(c,180,60,11); sgDot(c,72,196,11); },
+ venn(c){ c.beginPath(); c.arc(96,128,64,0,7); c.stroke(); c.beginPath(); c.arc(160,128,64,0,7); c.stroke(); },
+ scatter(c){ sgAxes(c); [[60,190],[84,170],[100,176],[122,146],[140,140],[160,112],[178,104],[196,80]].forEach(([x,y])=>sgDot(c,x,y)); sgLine(c,48,196,212,72,true); },
+ dice(c){ sgRound(c,52,52,152,152,26); [[90,90],[166,90],[128,128],[90,166],[166,166]].forEach(([x,y])=>sgDot(c,x,y,12)); },
+ cube(c){ c.beginPath(); c.rect(56,92,108,108); c.moveTo(56,92); c.lineTo(100,48); c.lineTo(208,48); c.lineTo(164,92); c.moveTo(208,48); c.lineTo(208,156); c.lineTo(164,200); c.stroke(); },
+ vector(c){ sgArrow(c,52,196,200,68); },
+ axes3(c){ sgArrow(c,128,150,128,34); sgArrow(c,128,150,226,190); sgArrow(c,128,150,34,206); },
+ plane(c){ c.beginPath(); c.moveTo(36,170); c.lineTo(108,110); c.lineTo(222,110); c.lineTo(150,170); c.closePath(); c.stroke(); sgArrow(c,128,140,128,34); },
+ matrix(c){ c.beginPath(); c.moveTo(78,50); c.lineTo(52,50); c.lineTo(52,206); c.lineTo(78,206); c.moveTo(178,50); c.lineTo(204,50); c.lineTo(204,206); c.lineTo(178,206); c.stroke(); [[96,94],[160,94],[96,162],[160,162]].forEach(([x,y])=>sgDot(c,x,y,11)); },
+ wave(c){ sgAxes(c); sgPlot(c,x=>Math.sin(x*3.4)*1.2,-1.75,1.75); },
+ expo(c){ sgAxes(c); sgPlot(c,x=>Math.pow(2.2,x*1.3)-1,-1.75,1.05); },
+ tree(c){ sgDot(c,48,128); [[200,56],[200,104],[200,152],[200,200]].forEach(([x,y],i)=>{ const mx=124, my=i<2?80:176; sgLine(c,48,128,mx,my); sgLine(c,mx,my,x,y); sgDot(c,x,y); }); sgDot(c,124,80); sgDot(c,124,176); },
+ cone(c){ c.beginPath(); c.moveTo(60,214); c.lineTo(128,40); c.lineTo(196,214); c.stroke(); c.beginPath(); c.ellipse(128,170,52,16,0,0,7); c.stroke(); },
+ ellipse(c){ sgAxes(c); c.beginPath(); c.ellipse(128,128,96,58,0,0,7); c.stroke(); sgDot(c,52,128,8); sgDot(c,204,128,8); },
+ tangent(c){ sgAxes(c); sgPlot(c,x=>0.8*x*x-1.4,-1.7,1.7); sgLine(c,64,196,236,48); sgDot(c,150,124); },
+ riemann(c){ c.save(); c.lineWidth=5; c.globalAlpha=.55; sgLine(c,36,200,224,200); sgLine(c,48,212,48,36); c.restore(); for(let i=0;i<5;i++){ const x=48+i*34, h=Math.pow((i+1)/5,2)*150; c.strokeRect(x,200-h,34,h); } c.beginPath(); for(let i=0;i<=40;i++){ const u=i/40; c.lineTo(48+u*170, 200-u*u*150); } c.stroke(); },
+ bars(c){ sgLine(c,40,212,216,212); [18,52,92,120,96,58,24].forEach((h,i)=>c.strokeRect(46+i*24,212-h*1.4,18,h*1.4)); },
+ lp(c){ sgAxes(c); c.beginPath(); c.moveTo(128,128); c.lineTo(128,58); c.lineTo(176,72); c.lineTo(210,128); c.closePath(); c.globalAlpha=.35; c.fill(); c.globalAlpha=1; c.stroke(); sgLine(c,96,40,226,140,true); }
+};
+function sgLine(c,x1,y1,x2,y2,dash){ c.save(); if(dash) c.setLineDash([14,12]); c.beginPath(); c.moveTo(x1,y1); c.lineTo(x2,y2); c.stroke(); c.restore(); }
+function sgDot(c,x,y,r=9){ c.beginPath(); c.arc(x,y,r,0,7); c.fill(); }
+function sgRound(c,x,y,w,h,r){ c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); c.stroke(); }
+function sgArrow(c,x1,y1,x2,y2){ sgLine(c,x1,y1,x2,y2); const a=Math.atan2(y2-y1,x2-x1); c.beginPath(); c.moveTo(x2,y2); c.lineTo(x2-26*Math.cos(a-0.45),y2-26*Math.sin(a-0.45)); c.lineTo(x2-26*Math.cos(a+0.45),y2-26*Math.sin(a+0.45)); c.closePath(); c.fill(); }
+function sgAxes(c){ c.save(); c.lineWidth=4; c.globalAlpha=.55; c.setLineDash([]); sgLine(c,30,128,226,128); sgLine(c,128,226,128,30); c.restore(); }
+function sgPlot(c,f,a,b){ c.beginPath(); for(let i=0;i<=80;i++){ const x=a+(b-a)*i/80, px=128+x*56, py=128-f(x)*56; i?c.lineTo(px,py):c.moveTo(px,py); } c.stroke(); }
+const sigilTex = {};
+function sigilTexture(code){
+  if (sigilTex[code]) return sigilTex[code];
+  const cv=document.createElement('canvas'); cv.width=cv.height=512; const c=cv.getContext('2d'); c.scale(2,2); const s=SIGIL[code]||'∑';   // drawn in 256 units at 2× for crisp close-ups
+  c.strokeStyle=c.fillStyle='#fff3c4'; c.lineWidth=9; c.lineCap=c.lineJoin='round'; c.shadowColor='#ffb84a'; c.shadowBlur=22;
+  const draw=()=>{ if(s[0]==='@') SIGIL_ICON[s.slice(1)](c); else { let fs=150; c.font=`700 ${fs}px "Noto Serif TC","Times New Roman",serif`; while(c.measureText(s).width>220 && fs>40){ fs-=8; c.font=`700 ${fs}px "Noto Serif TC","Times New Roman",serif`; } c.textAlign='center'; c.textBaseline='middle'; c.fillText(s,128,136); } };
+  draw(); c.shadowBlur=8; draw();   // two passes: wide glow, then a crisp core
+  const tex=new THREE.CanvasTexture(cv); tex.encoding=THREE.sRGBEncoding; tex.anisotropy=renderer.capabilities.getMaxAnisotropy(); return sigilTex[code]=tex;
+}
+let sigil=null;
+function makeSigil(){
+  const g=new THREE.Group();
+  const halo=document.createElement('canvas'); halo.width=halo.height=128; const h=halo.getContext('2d'); const grd=h.createRadialGradient(64,64,0,64,64,64);
+  grd.addColorStop(0,'rgba(255,214,120,.55)'); grd.addColorStop(.45,'rgba(255,190,80,.18)'); grd.addColorStop(1,'rgba(255,190,80,0)'); h.fillStyle=grd; h.fillRect(0,0,128,128);
+  const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(halo), blending:THREE.AdditiveBlending, depthTest:false, transparent:true}));
+  const mark=new THREE.Sprite(new THREE.SpriteMaterial({blending:THREE.AdditiveBlending, depthTest:false, transparent:true}));
+  glow.scale.set(4,4,1); mark.scale.set(2.1,2.1,1); glow.renderOrder=mark.renderOrder=999; g.add(glow, mark); g.visible=false; scene.add(g);
+  sigil={g, glow, mark, base:new THREE.Vector3(), t0:0};
+  anim.push(t=>{ if(!sigil.g.visible) return; const k=Math.min(1,(performance.now()-sigil.t0)/700), e=1-Math.pow(1-k,3);
+    sigil.g.position.set(sigil.base.x, sigil.base.y + (reduceMotion?0:Math.sin(t*1.6)*0.18) + (1-e)*-0.8, sigil.base.z);
+    const pulse = reduceMotion?1:0.85+0.15*Math.sin(t*2.4); sigil.mark.material.opacity=e; sigil.glow.material.opacity=e*pulse;
+    // keep a readable on-screen size at any zoom: grows with distance, clamped at both ends
+    const sz=Math.min(6, Math.max(1.4, camera.position.distanceTo(sigil.g.position)*0.16));
+    sigil.mark.scale.set(sz,sz,1); sigil.glow.scale.setScalar(sz*1.9*(0.9+0.1*pulse)); });
+}
+// returns the point the camera should look at so the tower and its sigil sit mid-screen
+function showSigil(code){
+  if(!has3D || !scene || !buildings[code]) return null;
+  if(!sigil) makeSigil();
+  const p=new THREE.Vector3(); buildings[code].getWorldPosition(p);
+  const isl=islandOf[code], c=hexPos(isl.q,isl.r);   // hover over the island's plaza, below its name label
+  sigil.base.set(c.x, TOP+(isl.elev||0)+PL+(isl.lh||6.4)*0.6, c.z);
+  sigil.mark.material.map=sigilTexture(code); sigil.mark.material.needsUpdate=true;
+  if(sigil.code!==code || !sigil.g.visible) sigil.t0=performance.now();   // re-renders of the same card keep the sigil steady
+  sigil.code=code; sigil.g.visible=true;
+  return new THREE.Vector3((p.x+c.x)/2, (p.y+sigil.base.y)/2, (p.z+c.z)/2);   // frame both the building and the sigil
+}
+function hideSigil(){ if(sigil) sigil.g.visible=false; }
 function selectIsland(id, fly){
-  const isl=ISLANDS.find(i=>i.id===id); if(!isl) return; selected={type:'island', id};
+  const isl=ISLANDS.find(i=>i.id===id); if(!isl) return; selected={type:'island', id}; hideSigil();
   if (has3D && fly){ const p=hexPos(isl.q,isl.r); flyTo(new THREE.Vector3(p.x,TOP+(isl.elev||0)+PL,p.z), 20, 0.98); }
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===id));
   const done=doneCount(isl.entries);
@@ -967,7 +1068,8 @@ function selectIsland(id, fly){
 }
 function selectEntry(code, fly){
   const e=byCode[code]; if(!e) return; const isl=islandOf[code]; selected={type:'entry', code}; linesMuted=false;
-  if (has3D && fly && buildings[code]){ const p=new THREE.Vector3(); buildings[code].getWorldPosition(p); flyTo(p, 11, 1.05); }
+  const look = showSigil(code);
+  if (has3D && fly && look) flyTo(look, 15, 1.05);
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===isl.id));
   const related = LINKS.filter(L=>L[0]===code||L[1]===code).map(L=>{ const other=L[0]===code?L[1]:L[0]; return `<button data-go="${other}" title="${esc(L[2])}">${esc(other)} ${esc(byCode[other].title)}</button>`; }).join('');
   const sec=(title, arr, ordered)=> arr&&arr.length ? `<h4>${title}</h4><${ordered?'ol':'ul'}>${arr.map(x=>`<li>${rich(x)}</li>`).join('')}</${ordered?'ol':'ul'}>` : '';
@@ -1139,7 +1241,7 @@ function openScroll(code){
   $('#scroll-close').focus(); typeset($('#scroll-sheet'));
 }
 function closeScroll(){ $('#scroll').hidden=true; $('#backdrop').hidden=true; if(scrollReturn && scrollReturn.isConnected) scrollReturn.focus(); scrollReturn=null; }
-function closeCard(){ $('#card').hidden=true; selected=null; labels.forEach(l=>l.el.classList.remove('active')); refreshLinks(); setHash(''); }
+function closeCard(){ $('#card').hidden=true; selected=null; hideSigil(); labels.forEach(l=>l.el.classList.remove('active')); refreshLinks(); setHash(''); }
 function setHash(h){ try { if (location.hash.replace('#','')!==h) history.replaceState(null,'',h?'#'+h:location.pathname+location.search); } catch(e){} }
 function routeFromHash(){ const h=location.hash.replace('#',''); if(!h) return; if(codeOfHash[h]) selectEntry(codeOfHash[h], true); else if (ISLANDS.some(i=>i.id===h)) selectIsland(h, true); }
 
