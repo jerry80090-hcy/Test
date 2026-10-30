@@ -1054,7 +1054,7 @@ function showSigil(code){
 function hideSigil(){ if(sigil) sigil.g.visible=false; }
 function selectIsland(id, fly){
   const isl=ISLANDS.find(i=>i.id===id); if(!isl) return; selected={type:'island', id}; hideSigil();
-  if (has3D && fly){ const p=hexPos(isl.q,isl.r); flyTo(new THREE.Vector3(p.x,TOP+(isl.elev||0)+PL,p.z), 20, 0.98); }
+  if (has3D && fly){ const p=hexPos(isl.q,isl.r); flyTo(new THREE.Vector3(p.x,TOP+(isl.elev||0)+PL,p.z), 32, 0.98); }
   labels.forEach(l=>l.el.classList.toggle('active', l.isl.id===id));
   const done=doneCount(isl.entries);
   const h = `
